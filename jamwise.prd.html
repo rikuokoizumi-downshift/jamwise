@@ -1,0 +1,680 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JamWise PRD: 1.0 and 2.0</title>
+<meta name="description" content="Product requirements for JamWise MVP 1.0 (closed beta, December 2026) and 2.0 (the Flocabulary-parity release). Epics, features, user stories, cutoffs, decisions and risks.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--brand:#7C3AED;--brand-soft:#EDE4FD;--brand-ink:#4C1D95;--bg:#FFFFFF;--surface:#F7F5FB;--line:#E6E1F0;--ink:#1C1730;--muted:#625B78;
+    --ok:#1F8A4C;--ok-soft:#DDF3E5;--bad:#C62828;--bad-soft:#FBE1E1;--warn:#A15C00;--warn-soft:#FFEFD5;--info:#0B5FA5;--info-soft:#DCEBFA;--gray:#5B5B66;--gray-soft:#ECECF0;--radius:12px}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--brand:#A98BFF;--brand-soft:#2A1F4A;--brand-ink:#D9CCFF;--bg:#121018;--surface:#1A1722;--line:#2C2738;--ink:#F1EDF8;--muted:#A9A2BC;--ok:#5FD38C;--ok-soft:#133A24;--bad:#FF7B7B;--bad-soft:#4A1A1A;--warn:#FFC266;--warn-soft:#3F2A08;--info:#7FBFFF;--info-soft:#0F2A47;--gray:#C3C0CF;--gray-soft:#2A2834}}
+  :root[data-theme="dark"]{--brand:#A98BFF;--brand-soft:#2A1F4A;--brand-ink:#D9CCFF;--bg:#121018;--surface:#1A1722;--line:#2C2738;--ink:#F1EDF8;--muted:#A9A2BC;--ok:#5FD38C;--ok-soft:#133A24;--bad:#FF7B7B;--bad-soft:#4A1A1A;--warn:#FFC266;--warn-soft:#3F2A08;--info:#7FBFFF;--info-soft:#0F2A47;--gray:#C3C0CF;--gray-soft:#2A2834}
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Fredoka",system-ui,sans-serif;font-weight:400;letter-spacing:-0.012em;line-height:1.5;font-size:16px}
+  a{color:var(--brand);text-decoration:none;border-bottom:1px solid transparent}a:hover{border-bottom-color:var(--brand)}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+  header.top{border-bottom:1px solid var(--line);background:var(--surface)}header.top .wrap{padding:28px 16px 22px}
+  .eyebrow{font-size:13px;font-weight:600;color:var(--brand);letter-spacing:.04em;text-transform:uppercase}
+  h1{font-size:34px;line-height:1.08;font-weight:600;margin:6px 0 10px}
+  h2{font-size:24px;line-height:1.12;font-weight:600;margin:0 0 12px;padding-top:8px}
+  h3{font-size:18px;font-weight:600;margin:22px 0 8px}
+  h4{font-size:15px;font-weight:600;margin:16px 0 6px;color:var(--brand-ink)}
+  p{margin:0 0 12px}.meta{display:flex;flex-wrap:wrap;gap:8px 18px;color:var(--muted);font-size:14px;margin-top:8px}.meta b{color:var(--ink);font-weight:500}
+  .layout{display:grid;grid-template-columns:250px 1fr;gap:32px;align-items:start;padding:28px 0 80px}
+  nav.toc{position:sticky;top:16px;font-size:14px;border:1px solid var(--line);border-radius:var(--radius);padding:14px;background:var(--surface);max-height:calc(100vh - 32px);overflow:auto}
+  nav.toc .t{font-weight:600;margin:8px 0 6px}nav.toc a{display:block;padding:3px 0;color:var(--muted)}nav.toc a:hover{color:var(--brand);border:0}
+  main section{margin-bottom:44px;scroll-margin-top:16px}
+  ul{list-style:none;padding-left:0;margin:0 0 12px}ul li{position:relative;padding-left:16px;margin:4px 0}ul li::before{content:"-";position:absolute;left:0;color:var(--muted)}
+  ol{padding-left:22px;margin:0 0 12px}ol li{margin:4px 0}
+  table{width:100%;border-collapse:collapse;font-size:14.5px;margin:10px 0 16px}
+  th,td{text-align:left;vertical-align:top;padding:9px 10px;border-bottom:1px solid var(--line)}
+  th{font-weight:600;background:var(--surface);font-size:13px;letter-spacing:.02em;text-transform:uppercase;color:var(--muted)}
+  .pill{display:inline-block;font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px;white-space:nowrap;line-height:1.5;vertical-align:middle}
+  .exists{background:var(--ok-soft);color:var(--ok)}.broken{background:var(--bad-soft);color:var(--bad)}.fixready{background:var(--info-soft);color:var(--info)}
+  .unverified{background:var(--warn-soft);color:var(--warn)}.notbuilt{background:var(--gray-soft);color:var(--gray)}.decision{background:var(--brand-soft);color:var(--brand-ink)}
+  .pri{display:inline-block;font-size:11px;font-weight:600;padding:1px 7px;border:1px solid var(--line);border-radius:6px;margin-left:6px;color:var(--muted);vertical-align:middle}.pri.must{border-color:var(--brand);color:var(--brand)}
+  .rel{display:inline-block;font-size:11px;font-weight:600;padding:1px 7px;border-radius:6px;background:var(--brand);color:#fff;vertical-align:middle}.rel.two{background:var(--info)}
+  .card{border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;margin:12px 0;background:var(--surface)}
+  .card.flag{border-left:4px solid var(--brand)}.card.warn{border-left:4px solid var(--warn)}.card.bad{border-left:4px solid var(--bad)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .story{border-left:3px solid var(--brand-soft);padding:6px 0 6px 12px;margin:8px 0}.story b{font-weight:600}.story .ac{font-size:14px;color:var(--muted);margin-top:4px}
+  .kicker{font-size:14px;color:var(--muted)}.legend{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 4px}
+  .divider{border:0;border-top:3px solid var(--brand);margin:40px 0 28px}
+  .big{font-size:20px;font-weight:500}
+  footer{border-top:1px solid var(--line);padding:18px 0 40px;color:var(--muted);font-size:13px}
+  @media (max-width:900px){.layout{grid-template-columns:1fr;gap:18px}nav.toc{position:static;max-height:none}.grid2{grid-template-columns:1fr}h1{font-size:28px}table{display:block;overflow-x:auto}}
+  @media print{nav.toc{display:none}.layout{display:block}body{font-size:12.5px}a{color:inherit}.card{break-inside:avoid}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="eyebrow">JamWise · Product requirements</div>
+    <h1>JamWise PRD: what ships in December, and what makes it a Flocabulary killer after that</h1>
+    <p class="kicker">Two releases. <b>1.0</b> is the closed beta that has to be in teachers' hands before winter break, scoped to what two and a half engineers can finish in seven weeks. <b>2.0</b> is the release that matches Flocabulary's lesson sequence step for step and beats it on games, video and price. Nothing in 1.0 is there because it is nice; everything in 2.0 is there because a teacher or a school will ask for it.</p>
+    <div class="meta">
+      <span><b>Version</b> 1.0 draft (supersedes MVP v1 draft 0.1)</span>
+      <span><b>Date</b> October 27, 2026</span>
+      <span><b>Owner</b> Rikuo Koizumi, Product Owner</span>
+      <span><b>Decider</b> Manuel Zamora</span>
+      <span><b>1.0 target</b> Beta invites Monday, December 14, 2026</span>
+      <span><b>2.0 target</b> Set after beta week 2; working assumption March 2027</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap layout">
+  <nav class="toc" aria-label="Contents">
+    <div class="t">Start here</div>
+    <a href="#read">0. How to read this</a>
+    <a href="#changed">1. What changed since draft 0.1</a>
+    <a href="#thesis">2. The product in one paragraph</a>
+    <a href="#users">3. Who it's for</a>
+    <a href="#parity">4. The Flocabulary map</a>
+    <div class="t">Release 1.0 · December</div>
+    <a href="#r1">5. 1.0 in one page</a>
+    <a href="#r1-epics">6. 1.0 epics, features, stories</a>
+    <a href="#r1-plan">7. 1.0 seven-week plan</a>
+    <a href="#r1-gates">8. 1.0 launch gates</a>
+    <a href="#r1-risks">9. 1.0 risks</a>
+    <div class="t">Release 2.0</div>
+    <a href="#r2">10. 2.0 in one page</a>
+    <a href="#r2-epics">11. 2.0 epics and features</a>
+    <a href="#r2-order">12. 2.0 ordering and entry criteria</a>
+    <div class="t">Shared</div>
+    <a href="#measures">13. Measures</a>
+    <a href="#decisions">14. Decisions</a>
+    <a href="#team">15. Team and working agreement</a>
+    <a href="#out">16. Not in 1.0 or 2.0</a>
+    <a href="#links">17. Sources and links</a>
+    <a href="#log">18. Change log</a>
+  </nav>
+
+  <main>
+
+  <section id="read">
+    <h2>0. How to read this</h2>
+    <p>Every feature carries a <b>status</b> (true today), a <b>release</b> (1.0 or 2.0) and a <b>priority inside that release</b>. Status and priority are separate on purpose: a feature can be Must for 1.0 and Broken today. That gap is the work.</p>
+    <div class="legend">
+      <span class="pill exists">Exists</span><span class="pill unverified">Unverified</span><span class="pill fixready">Fix ready</span><span class="pill broken">Broken</span><span class="pill notbuilt">Not built</span><span class="pill decision">Decision</span>
+      <span class="rel">1.0</span><span class="rel two">2.0</span>
+    </div>
+    <ul>
+      <li><b>Exists</b>: seen working on staging or confirmed by the engineer who owns it. <b>Unverified</b>: the site claims it; nobody on the team has seen it run. <b>Fix ready</b>: verified fix waiting in PR #2. <b>Broken</b>: reproduced with evidence on Asana. <b>Not built</b>: no evidence it exists. <b>Decision</b>: blocked on section 14.</li>
+      <li><span class="pri must">Must</span> ships or the release does not. <span class="pri">Should</span> ships if it costs nothing extra, else moves to the next release. <span class="pri">Stretch</span> is in only if the cutoff date is met.</li>
+      <li>Sources: jamwise.com recrawl (Oct 21), the Asana board (22 tickets), #jamwise-engineering, the Oct 21 team sync and Nedi 1:1 transcripts, the competitive analysis (Oct 10), Flocabulary's published lesson sequence.</li>
+    </ul>
+  </section>
+
+  <section id="changed">
+    <h2>1. What changed since draft 0.1</h2>
+    <p>Draft 0.1 was written before the team had met. The Oct 21 sync and the Nedi 1:1 changed five things.</p>
+    <table>
+      <thead><tr><th>Topic</th><th>Draft 0.1 said</th><th>Now</th><th>Source</th></tr></thead>
+      <tbody>
+        <tr><td>Custom jam generation</td><td>Decision; recommended hiding it</td><td><b>Core.</b> "Teachers plug in lesson plans and it generates songs" is how the PO and the games lead both describe the product. Audio generation pipeline reported working. In 1.0 as audio plus on-screen lyrics; generated video for custom jams in 2.0.</td><td>Sync 11:21, Nedi 1:1 14:19, Jaypal 18:46</td></tr>
+        <tr><td>Target date</td><td>None</td><td><b>Early to mid-December</b>, agreed in the sync by Jaypal and Nedi as feasible. This document plans to Dec 14 invites.</td><td>Sync 17:50, 18:46, 21:11</td></tr>
+        <tr><td>The benchmark</td><td>Flocabulary as the contrast</td><td><b>"We definitely need to do all of the things they're doing."</b> Parity with their lesson sequence is now a 2.0 requirement, and better video, songs and games is the 1.0 to 2.0 arc. Replicate the workflows teachers already know (codes, Google Classroom); invent no new ones.</td><td>Manuel, sync 27:14</td></tr>
+        <tr><td>Video</td><td>Unknown scope, placeholder epic</td><td>Jaypal has a staged pipeline (transcript, story, shots, characters, keyframes, image-to-motion, lip-sync, cut) with QA at each stage and four video types. Lip-sync is the open problem. Showcase set is a 1.0 stretch; scale is 2.0.</td><td>Sync 29:15 to 38:44</td></tr>
+        <tr><td>Games</td><td>Fix the ten</td><td>Nedi's direction: games by age bracket; for 10+ a join-code live mode with leaderboard on students' own devices; teacher-authored question sets later. Full proposal due from Nedi. 1.0 ships five games that pass the bar; the live mode is 2.0.</td><td>Nedi 1:1 29:49 to 37:45, sync 24:52</td></tr>
+        <tr><td>CI blocker</td><td>Workflow config</td><td><b>GitHub Actions org billing or spending limit.</b> Checks fail before tests start. This is Manuel's to fix, not Andi's, and it is the first item in week 1.</td><td>Andi, sync 42:22</td></tr>
+        <tr><td>Pricing</td><td>Subscription per site</td><td>PO leaning to credit-based premium (for example $7.99 for N credits) because generation cost varies; free tier limited by generations, not minutes; school plan with a head-teacher dashboard. No billing in 1.0 either way.</td><td>Nedi 1:1 18:46 to 21:42</td></tr>
+        <tr><td>Demand</td><td>Unknown</td><td>Inbound requests to reserve about 50 teacher seats, before any launch. These are the beta cohort.</td><td>Rikuo, Nedi 1:1 ~11:00</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="thesis">
+    <h2>2. The product in one paragraph</h2>
+    <p class="big">A teacher types a topic or pastes a lesson. JamWise gives back a one-minute song with lyrics on screen, built for that grade, in a genre that fits the subject. The teacher plays it on the projector, then the class practices inside the song: karaoke fill-in-the-blank, rhythm recall, quiz boards. Results land per student while there is still time to reteach. The library of reviewed jams means tomorrow's lesson is usually already there; generation covers the rest.</p>
+    <div class="card flag"><b>The line against every competitor.</b> Kahoot, Blooket and Gimkit test recall. MagicSchool, Knowt and Suno make songs. Flocabulary has songs and activities but one genre, 2004 video, and $11.50 a month. Only JamWise plays the game inside the music. That mechanic is the thing to protect in 1.0 and the thing to extend in 2.0.</div>
+  </section>
+
+  <section id="users">
+    <h2>3. Who it's for</h2>
+    <table>
+      <thead><tr><th>User</th><th>1.0</th><th>2.0</th><th>What they need</th></tr></thead>
+      <tbody>
+        <tr><td><b>Teacher</b>, K-8, elementary-leaning, already uses Kahoot, Quizizz or Flocabulary</td><td>Primary</td><td>Primary</td><td>Find or make a jam fast, play it, run a game, see who got it. No procurement.</td></tr>
+        <tr><td><b>Student</b>, mostly under 13, joins through a class only</td><td>Via join code on own device or shared screen</td><td>Live multiplayer with leaderboard (10+); singing modes for younger grades</td><td>Join without an account or personal info. A game that works.</td></tr>
+        <tr><td><b>School admin / head teacher</b></td><td>Not in 1.0 (beta is per teacher)</td><td>School plan: admin dashboard, seats, teacher roster, usage</td><td>Buy once, roll out to teachers, see usage. This is the tier Manuel's partners sell.</td></tr>
+        <tr><td><b>Parent</b></td><td>Not in 1.0; site shows "coming later"</td><td>Family accounts, child profiles, playlists</td><td>Safe, ad-free music at home that matches school.</td></tr>
+        <tr><td><b>District buyer</b></td><td>No</td><td>Privacy pack, rostering, accessibility statement</td><td>Paperwork before product. Gated by FR-21.</td></tr>
+      </tbody>
+    </table>
+    <p>Age brackets for content and games, as the PO and games lead framed them: K to Grade 2 (about ages 4 to 7), Grades 3 to 5 (8 to 10), Grades 6 to 8 (11 to 14). Nedi may propose going above Grade 8 in 2.0; 1.0 stays K-8.</p>
+  </section>
+
+  <section id="parity">
+    <h2>4. The Flocabulary map</h2>
+    <p>Flocabulary's published lesson sequence, and what JamWise ships against each step. This is the 2.0 definition of done for "do all the things they're doing," with the 1.0 subset marked.</p>
+    <table>
+      <thead><tr><th>Flocabulary step</th><th>What it is</th><th>JamWise equivalent</th><th>Release</th></tr></thead>
+      <tbody>
+        <tr><td>1. Video</td><td>Standards-aligned song video, hip-hop only, 2004-era production</td><td>The jam: any genre, grade-targeted, pipeline-generated video. 1.0 ships existing library video plus audio-and-lyrics for custom jams; 2.0 ships pipeline video at scale.</td><td><span class="rel">1.0</span> partial · <span class="rel two">2.0</span> full</td></tr>
+        <tr><td>2. Vocab Cards</td><td>Terms with definitions, part of speech, example sentence, image, synonyms</td><td>Vocabulary list per jam. The games already run on a vocabulary set, so exposing it as cards is cheap.</td><td><span class="rel">1.0</span> Should (list) · <span class="rel two">2.0</span> cards with images and sentences</td></tr>
+        <tr><td>3. Vocab Game</td><td>Practice questions; correct answers add instruments to a beat</td><td>Melody Map, Beat Drop, Rhythm Recall, Lyric Lockdown. JamWise's version plays inside the actual song, which is the stronger mechanic.</td><td><span class="rel">1.0</span></td></tr>
+        <tr><td>4. Break It Down</td><td>Analysis questions with video-clip evidence; open-ended for Grade 3+</td><td>Not built. 2.0: "Break the Beat" or similar, timestamped questions on the jam with lyric-line evidence.</td><td><span class="rel two">2.0</span></td></tr>
+        <tr><td>5. Read &amp; Respond</td><td>Reading passages extending the topic; inference and main idea</td><td>Not built. 2.0: a short reading passage generated with the jam and reviewed with it.</td><td><span class="rel two">2.0</span></td></tr>
+        <tr><td>6. Quiz</td><td>10 multiple-choice, auto-graded, exit ticket</td><td>Quiz Show and Streak Sprint. 2.0 adds a plain 10-question exit ticket because some teachers want the boring version.</td><td><span class="rel">1.0</span> games · <span class="rel two">2.0</span> plain quiz</td></tr>
+        <tr><td>7. Lyric Lab</td><td>Students write their own rap with the vocabulary; beat picker, rhyming dictionary</td><td>Not built. 2.0: "Verse Lab", students write a verse to the jam's beat, with the same review and safety gate as custom jams.</td><td><span class="rel two">2.0</span></td></tr>
+        <tr><td>Discuss mode</td><td>Pauses video at key moments with discussion questions</td><td>Not built. 2.0, inside projector mode.</td><td><span class="rel two">2.0</span></td></tr>
+        <tr><td>Assign and auto-grade</td><td>Assign activities to a class; game and quiz auto-graded</td><td>Assign jam plus game to a class; results per student.</td><td><span class="rel">1.0</span></td></tr>
+        <tr><td>Integrations</td><td>Google Classroom, Clever, ClassLink</td><td>Google Classroom in 2.0; Clever and ClassLink with the school plan.</td><td><span class="rel two">2.0</span></td></tr>
+      </tbody>
+    </table>
+    <p>Where JamWise goes past them: genre matched to subject, games played inside the music, live multiplayer on students' own devices, generation on demand, free classroom tier.</p>
+  </section>
+
+  <hr class="divider">
+
+  <section id="r1">
+    <h2>5. Release 1.0 in one page</h2>
+    <p class="big">A closed beta for the teachers who already asked. Free, teachers only, web only. Five things have to work.</p>
+    <ol>
+      <li><b>Get in.</b> Sign up, verify, sign in. Staging and production.</li>
+      <li><b>Find a jam.</b> A reviewed, rights-cleared library you can search by topic and filter by subject, grade and standard, with the real count on the site.</li>
+      <li><b>Make a jam.</b> Type a topic or paste lesson text, get a song with lyrics on screen, review it, play games on it. Three a month. Audio and lyrics only; no generated video for custom jams in 1.0.</li>
+      <li><b>Play.</b> Projector mode, and five games that pass the quality bar, at least two of them played inside the audio.</li>
+      <li><b>Run a class.</b> Create a class, students join by code with no personal info, assign a jam and a game, see results per student.</li>
+    </ol>
+    <p>Plus the things that make it safe to let strangers in: a site that tells the truth, a current privacy policy, CI that merges, a seeded staging, one QA, and analytics events on the six measures.</p>
+    <div class="card warn"><b>Capacity, honestly.</b> Seven weeks from Oct 27 to Dec 11, one of them Thanksgiving. Andi is finishing the Sketchie handoff. Nedi is shared across projects. Jaypal is on the pipeline. That is roughly one and a half engineers on the app. 1.0 is sized to that. Anything added to 1.0 after Nov 6 pushes something else out, and the PO will say which.</div>
+    <div class="card bad"><b>The calendar problem.</b> Most US schools break around Dec 18 to 19. Invites on Dec 14 give teachers three or four school days with the product. Plan for it: beta invites and onboarding in December, real classroom usage and the first measures in the week of Jan 5. If week 1 unblocks slip past Nov 6, the honest date is Jan 5 invites, and the PO will call that by Nov 9, not in December.</div>
+  </section>
+
+  <section id="r1-epics">
+    <h2>6. Release 1.0: epics, features, user stories</h2>
+    <p class="kicker">Ten epics. Owners are proposed. Ticket IDs refer to the JamWise Asana board; "new" means the PO writes it this week.</p>
+
+    <h3 id="e1">E1. Access and accounts</h3>
+    <p class="kicker">Owner: Andi · Decider: Manuel</p>
+    <table>
+      <thead><tr><th>Feature</th><th>Status</th><th>Priority</th><th>Ticket</th></tr></thead>
+      <tbody>
+        <tr><td>F1.1 Teacher sign-up with email verification (Resend)</td><td><span class="pill broken">Broken</span> accounts created unverified, no email sent on staging</td><td><span class="pri must">Must</span></td><td>new</td></tr>
+        <tr><td>F1.2 Sign-in, sign-out, password reset</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>new</td></tr>
+        <tr><td>F1.3 Team and QA accounts on staging (Downshift logins)</td><td><span class="pill broken">Broken</span> Manuel committed to credentials in the sync</td><td><span class="pri must">Must</span> week 1</td><td>new, Manuel</td></tr>
+        <tr><td>F1.4 Beta invite: waitlist email gets an invite link; "Join waitlist" stops creating accounts</td><td><span class="pill broken">Broken</span></td><td><span class="pri must">Must</span></td><td>BUG-22</td></tr>
+        <tr><td>F1.5 Parent accounts</td><td><span class="pill unverified">Unverified</span></td><td>2.0</td><td>D7</td></tr>
+      </tbody>
+    </table>
+    <div class="story"><b>US1.1</b> As a teacher, I want to sign up with my school email and verify it, so that I can sign in and reach the library.<div class="ac">Done when: verification email arrives within a minute; link signs me in; unverified accounts cannot reach the library.</div></div>
+    <div class="story"><b>US1.2</b> As an invited beta teacher, I want my invite link to take me straight to a working account, so that my first five minutes are not spent on access.<div class="ac">Done when: invite to first jam played in under five minutes, measured.</div></div>
+
+    <h3 id="e2">E2. Library and content</h3>
+    <p class="kicker">Owner: Manuel (content and review) · Andi (platform) · Jaypal (video)</p>
+    <table>
+      <thead><tr><th>Feature</th><th>Status</th><th>Priority</th><th>Ticket</th></tr></thead>
+      <tbody>
+        <tr><td>F2.1 Published jams on staging and production</td><td><span class="pill broken">Broken</span> staging has zero; production count unverified (site 250+, founder 1,000+)</td><td><span class="pri must">Must</span></td><td>FR-3 (publish CLI built, blocked on reviewed payload and rights-cleared audio)</td></tr>
+        <tr><td>F2.2 Search by topic; filter by subject, grade band, standard</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>new</td></tr>
+        <tr><td>F2.3 Standards tags on every published jam (CCSS, NGSS, C3, CASEL)</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>new</td></tr>
+        <tr><td>F2.4 Review gate: a jam is published only after lyric accuracy and age check, with reviewer recorded</td><td><span class="pill notbuilt">Not built</span> as a process</td><td><span class="pri must">Must</span></td><td>new</td></tr>
+        <tr><td>F2.5 Rights position written down for audio, vocals and visuals, per jam</td><td><span class="pill decision">Decision D12</span></td><td><span class="pri must">Must</span></td><td>new, Manuel</td></tr>
+        <tr><td>F2.6 Vocabulary list per jam (the set the games already use)</td><td><span class="pill unverified">Unverified</span> exists in data, not shown to teachers</td><td><span class="pri">Should</span></td><td>new</td></tr>
+        <tr><td>F2.7 Real published count on the site; five subjects named consistently (Social Studies)</td><td><span class="pill broken">Broken</span></td><td><span class="pri must">Must</span></td><td>BUG-17</td></tr>
+        <tr><td>F2.8 Showcase set: 10 jams re-rendered through Jaypal's pipeline</td><td><span class="pill notbuilt">Not built</span> lip-sync open</td><td><span class="pri">Stretch</span> cutoff Nov 27</td><td>new, Jaypal</td></tr>
+        <tr><td>F2.9 Public library preview for signed-out visitors</td><td><span class="pill notbuilt">Not built</span></td><td>2.0</td><td>FR-19</td></tr>
+      </tbody>
+    </table>
+    <div class="story"><b>US2.1</b> As a teacher planning at 9pm, I want to type "water cycle" and get the jam, so that I am not browsing.<div class="ac">Done when: topic search returns the matching jam first; filters narrow by subject, grade band and standard.</div></div>
+    <div class="story"><b>US2.2</b> As the team, we want nothing published that a reviewer has not signed, so that the Terms are true and a district can ask who checked it.<div class="ac">Done when: FR-3's CLI refuses a payload without reviewer and rights fields; every production jam has both.</div></div>
+    <div class="story"><b>US2.3</b> As a teacher, I want to see the vocabulary a jam teaches, so that I can preview it and tell parents.<div class="ac">Should. Done when: each jam page lists its vocabulary terms and short definitions.</div></div>
+
+    <h3 id="e3">E3. Custom jam generation</h3>
+    <p class="kicker">Owner: Manuel (audio pipeline) · Andi (product surface) · Jaypal (2.0 video). Highest-risk epic in 1.0.</p>
+    <p>This is core, not optional. It is also the feature most likely to embarrass us: cost without a quota, lyrics without a review, a vendor whose terms exclude under-13 users. Each of those has a feature below.</p>
+    <table>
+      <thead><tr><th>Feature</th><th>Status</th><th>Priority</th><th>Ticket</th></tr></thead>
+      <tbody>
+        <tr><td>F3.1 Generate from a topic or pasted lesson text: lyrics plus audio, grade band and subject chosen by the teacher, genre matched to subject</td><td><span class="pill unverified">Unverified</span> "audio pipeline working" per Jaypal; vendor unnamed</td><td><span class="pri must">Must</span></td><td>new</td></tr>
+        <tr><td>F3.2 Custom jam lands in the teacher's own Library, private, marked "unreviewed"</td><td><span class="pill broken">Broken</span> shows only in Dashboard</td><td><span class="pri must">Must</span></td><td>FR-8</td></tr>
+        <tr><td>F3.3 Teacher review step: read lyrics, edit or regenerate, mark reviewed; games unlock only after</td><td><span class="pill notbuilt">Not built</span></td><td><span class="pri must">Must</span></td><td>FR-8</td></tr>
+        <tr><td>F3.4 Every 1.0 game launches from a reviewed custom jam exactly as from a library jam</td><td><span class="pill broken">Broken</span></td><td><span class="pri must">Must</span></td><td>FR-8</td></tr>
+        <tr><td>F3.5 Quota: 3 per month per teacher, enforced server-side, visible in the UI</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>new</td></tr>
+        <tr><td>F3.6 Safety filter on input and output (no hateful, inappropriate or child-unsafe content; Terms section 6)</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>new</td></tr>
+        <tr><td>F3.7 Audio vendor named, licensing position for classroom use and under-13 listeners written down</td><td><span class="pill decision">Decision D12</span> Nedi suggested Suno; Suno's terms bar under-13 users and have no education plan</td><td><span class="pri must">Must</span></td><td>new, Manuel</td></tr>
+        <tr><td>F3.8 Generation time shown and bounded (target under 3 minutes; the site says "minutes")</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri">Should</span></td><td>new</td></tr>
+        <tr><td>F3.9 Cost per generation measured and logged</td><td><span class="pill notbuilt">Not built</span></td><td><span class="pri must">Must</span> (pricing in 2.0 depends on it)</td><td>new</td></tr>
+        <tr><td>F3.10 Generated video for custom jams</td><td><span class="pill notbuilt">Not built</span></td><td>2.0</td><td>E12</td></tr>
+      </tbody>
+    </table>
+    <div class="story"><b>US3.1</b> As a teacher with a topic nobody wrote a song for, I want to paste my lesson and get a song for my grade, so that the lesson still gets a jam.<div class="ac">Done when: paste text, pick grade band and subject, get lyrics and audio within the bounded time; the jam plays in projector mode with lyrics on screen.</div></div>
+    <div class="story"><b>US3.2</b> As a teacher, I want to read and fix the lyrics before my class hears them, so that I am never surprised in front of students.<div class="ac">Done when: lyrics are editable before "mark reviewed"; nothing unreviewed is playable to students; regenerate counts against quota, edit does not.</div></div>
+    <div class="story"><b>US3.3</b> As the business, we want every generation to cost a known amount, so that 2.0 pricing is arithmetic, not a guess.<div class="ac">Done when: each generation logs vendor cost and wall time; weekly total visible to Manuel and the PO.</div></div>
+
+    <h3 id="e4">E4. Play: projector mode</h3>
+    <p class="kicker">Owner: Andi</p>
+    <table>
+      <thead><tr><th>Feature</th><th>Status</th><th>Priority</th><th>Ticket</th></tr></thead>
+      <tbody>
+        <tr><td>F4.1 Full-screen playback with lyrics in time with audio; works for library video and custom audio-only jams</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>new</td></tr>
+        <tr><td>F4.2 Runs on Chromebook and smartboard browsers, no install</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>new</td></tr>
+        <tr><td>F4.3 Captions toggle generated from lyrics</td><td><span class="pill notbuilt">Not built</span> lyrics already timed on screen, so cheap</td><td><span class="pri">Should</span></td><td>FR-18</td></tr>
+        <tr><td>F4.4 Play again, pause, clean exit to the jam page</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>new</td></tr>
+      </tbody>
+    </table>
+    <div class="story"><b>US4.1</b> As a teacher, I want to hit play on the projector and have the room sing, so that the lesson opens with energy.<div class="ac">Done when: lyrics readable at 1280x720 from the back of a room; audio starts within 3 seconds on school Wi-Fi; tested on a Chromebook.</div></div>
+
+    <h3 id="e5">E5. Music games</h3>
+    <p class="kicker">Owner: Nedi (lead, quality bar, order) · Andi (shared launcher, landing)</p>
+    <p>1.0 ships <b>five games that pass the bar</b>, at least two played inside the audio. The target five and their fallbacks are below. A game that misses the bar on Dec 4 comes out of the launcher; we ship the real number and say so on the site.</p>
+    <table>
+      <thead><tr><th>Game</th><th>Status</th><th>Issue</th><th>1.0</th></tr></thead>
+      <tbody>
+        <tr><td>Lyric Lockdown (audio; the hero on the site)</td><td><span class="pill broken">Broken</span></td><td>BUG-6 word bank off-screen</td><td><span class="pri must">Must</span></td></tr>
+        <tr><td>Rhythm Recall (audio)</td><td><span class="pill fixready">Fix ready</span></td><td>BUG-14 in PR #2</td><td><span class="pri must">Must</span></td></tr>
+        <tr><td>Melody Map (matching)</td><td><span class="pill fixready">Fix ready</span></td><td>BUG-7, BUG-16 in PR #2</td><td><span class="pri must">Must</span></td></tr>
+        <tr><td>Beat Drop (falling vocabulary)</td><td><span class="pill fixready">Fix ready</span></td><td>BUG-15 in PR #2</td><td><span class="pri must">Must</span></td></tr>
+        <tr><td>Quiz Show (board)</td><td><span class="pill broken">Broken</span></td><td>BUG-12 ends at 15/16</td><td><span class="pri must">Must</span></td></tr>
+        <tr><td>Streak Sprint (speed quiz)</td><td><span class="pill broken">Broken</span></td><td>BUG-5 crash on final question</td><td><span class="pri">Stretch</span> first fallback</td></tr>
+        <tr><td>Gold Rush (chests, AI opponents)</td><td><span class="pill broken">Broken</span></td><td>BUG-10 shows the answer</td><td><span class="pri">Stretch</span></td></tr>
+        <tr><td>Beat Builder</td><td><span class="pill broken">Broken</span></td><td>BUG-13 audio hang, BUG-11 shows the answer</td><td>2.0</td></tr>
+        <tr><td>Crossword Craze</td><td><span class="pill notbuilt">Not seen</span></td><td>Named on site only</td><td>2.0 or cut (D2)</td></tr>
+        <tr><td>Lyric Scramble</td><td><span class="pill unverified">Unverified</span></td><td>Mentioned once in BUG-4</td><td>2.0 or cut (D2)</td></tr>
+      </tbody>
+    </table>
+    <table>
+      <thead><tr><th>Cross-cutting</th><th>Status</th><th>Priority</th><th>Ticket</th></tr></thead>
+      <tbody>
+        <tr><td>F5.1 Fullscreen lifecycle: no chrome over a game, no stale overlay, next game gets input</td><td><span class="pill broken">Broken</span> no recording yet</td><td><span class="pri must">Must</span></td><td>BUG-4</td></tr>
+        <tr><td>F5.2 One score submission per round, every game</td><td><span class="pill broken">Broken</span> in Streak Sprint</td><td><span class="pri must">Must</span></td><td>BUG-5, PR #2</td></tr>
+        <tr><td>F5.3 Desktop 1440x900 and mobile web 390x844 for every shipped game</td><td><span class="pill broken">Broken</span></td><td><span class="pri must">Must</span></td><td>per game</td></tr>
+        <tr><td>F5.4 Every shipped game tagged to the grade bands it suits (K-2, 3-5, 6-8)</td><td><span class="pill notbuilt">Not built</span></td><td><span class="pri must">Must</span></td><td>new, Nedi</td></tr>
+        <tr><td>F5.5 Quality bar written and owned by Nedi; checked per game before Ready for QA</td><td><span class="pill notbuilt">Not built</span> draft below</td><td><span class="pri must">Must</span></td><td>new, Nedi</td></tr>
+        <tr><td>F5.6 Audio failure recovery (no indefinite loading) in the shared launcher</td><td><span class="pill broken">Broken</span></td><td><span class="pri must">Must</span></td><td>BUG-13 generalised</td></tr>
+        <tr><td>F5.7 All games free in beta; no session caps</td><td><span class="pill decision">Decision D5</span></td><td>Proposed</td><td>none</td></tr>
+        <tr><td>F5.8 Keyboard and screen-reader play; non-audio path for audio games</td><td><span class="pill notbuilt">Not built</span></td><td>2.0</td><td>FR-20</td></tr>
+        <tr><td>F5.9 Live multiplayer by join code with leaderboard; teacher-authored question sets</td><td><span class="pill notbuilt">Not built</span></td><td>2.0</td><td>E11</td></tr>
+      </tbody>
+    </table>
+    <div class="card">
+      <h4>Quality bar, draft for Nedi to rewrite</h4>
+      <ul>
+        <li>Playable state in under 3 seconds on school Wi-Fi, or a clear error with retry.</li>
+        <li>Instructions fit one screen; a Grade 3 student can start without the teacher explaining.</li>
+        <li>No dead ends. Every state has a way forward or out.</li>
+        <li>Readable and tappable at 390px; no horizontal scroll; controls never leave the viewport.</li>
+        <li>The answer is never visible before the player responds.</li>
+        <li>Sound works, and the game is still playable if sound fails.</li>
+        <li>Results screen; Play Again starts fresh; Done returns clean; score submits once.</li>
+        <li>Feels like a game, not a quiz with a soundtrack. Nedi defines this line.</li>
+      </ul>
+    </div>
+    <div class="story"><b>US5.1</b> As a student, I want to finish a round and see my result, so that I know how I did.<div class="ac">Done when: every shipped game reaches results from a full run on desktop and 390px mobile with no error state, verified on staging by QA, not by the engineer.</div></div>
+    <div class="story"><b>US5.2</b> As a teacher, I want to launch any shipped game from any reviewed jam, library or custom, so that the song and the practice are one thing.<div class="ac">Done when: each shipped game launches from the jam page and from an assignment, for both jam types.</div></div>
+    <div class="story"><b>US5.3</b> As a Grade 1 teacher, I want to see only games that work for six-year-olds, so that I do not launch a Jeopardy board at a room that cannot read it.<div class="ac">Done when: the launcher filters by the class's grade band by default.</div></div>
+
+    <h3 id="e6">E6. Classes, join and assignments</h3>
+    <p class="kicker">Owner: Andi</p>
+    <table>
+      <thead><tr><th>Feature</th><th>Status</th><th>Priority</th><th>Ticket</th></tr></thead>
+      <tbody>
+        <tr><td>F6.1 Create a class with a grade band; add up to 35 students by display name only</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>new</td></tr>
+        <tr><td>F6.2 Join by class code or link; student picks their name from the list; no account, no PII</td><td><span class="pill unverified">Unverified</span> how students join today is unknown</td><td><span class="pri must">Must</span></td><td>new</td></tr>
+        <tr><td>F6.3 Assign a jam plus a game to the class with a due date; students see it on join</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>new</td></tr>
+        <tr><td>F6.4 Whole-class mode: teacher runs the game on the projector and students answer on the shared screen (for K-2 rooms without devices)</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri">Should</span></td><td>new</td></tr>
+        <tr><td>F6.5 Google Classroom import, assign, grade return</td><td><span class="pill unverified">Unverified</span></td><td>2.0</td><td>D8</td></tr>
+      </tbody>
+    </table>
+    <div class="story"><b>US6.1</b> As a teacher, I want to set up my class in five minutes with first names only, so that I never collect student emails.<div class="ac">Done when: a 30-student class is created with no field beyond display name; nothing a student enters is personal information under COPPA.</div></div>
+    <div class="story"><b>US6.2</b> As a student, I want to type the code from the board and tap my name, so that I am playing in the same minute.<div class="ac">Done when: code to first question in under 30 seconds on a phone, no sign-up.</div></div>
+
+    <h3 id="e7">E7. Results</h3>
+    <p class="kicker">Owner: Andi</p>
+    <table>
+      <thead><tr><th>Feature</th><th>Status</th><th>Priority</th><th>Ticket</th></tr></thead>
+      <tbody>
+        <tr><td>F7.1 Results per student per assignment: score, completion, time</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>new</td></tr>
+        <tr><td>F7.2 Results visible only to that student's teacher</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>new</td></tr>
+        <tr><td>F7.3 Class roll-up per standard</td><td><span class="pill unverified">Unverified</span></td><td>2.0</td><td>new</td></tr>
+        <tr><td>F7.4 Usage and outcomes export for pilots</td><td><span class="pill notbuilt">Not built</span></td><td>2.0</td><td>FR-23</td></tr>
+      </tbody>
+    </table>
+    <div class="story"><b>US7.1</b> As a teacher, I want to see each student's score on Friday's assignment, so that I know who to pull aside on Monday.<div class="ac">Done when: a class results view lists every student with score and completion, updated within a minute of a round ending.</div></div>
+
+    <h3 id="e8">E8. The site tells the truth</h3>
+    <p class="kicker">Owner: Rikuo (copy) · Andi (site) · Decider: Manuel. Launch gate.</p>
+    <table>
+      <thead><tr><th>Feature</th><th>Status</th><th>Priority</th><th>Ticket</th></tr></thead>
+      <tbody>
+        <tr><td>F8.1 Remove the six placeholder testimonials, the three uncited statistics and "Built by teachers, for teachers"</td><td><span class="pill broken">Broken</span> live</td><td><span class="pri must">Must</span></td><td>BUG-9</td></tr>
+        <tr><td>F8.2 One game count, one price, one tier list, one schools@ domain, Social Studies, real jam count</td><td><span class="pill broken">Broken</span> ticket description empty</td><td><span class="pri must">Must</span></td><td>BUG-17</td></tr>
+        <tr><td>F8.3 CTAs match launch status: waitlist until invited, no "Start Free"</td><td><span class="pill broken">Broken</span></td><td><span class="pri must">Must</span></td><td>BUG-22</td></tr>
+        <tr><td>F8.4 Parent and Premium pages marked "coming later"; no trial promised</td><td><span class="pill decision">Decision D6, D7</span></td><td><span class="pri must">Must</span></td><td>new</td></tr>
+        <tr><td>F8.5 Game names on the site match the launcher; internal names stay internal until Manuel approves</td><td><span class="pill decision">Decision D2</span></td><td><span class="pri must">Must</span></td><td>BUG-17</td></tr>
+      </tbody>
+    </table>
+
+    <h3 id="e9">E9. Trust, privacy and safety</h3>
+    <p class="kicker">Owner: Manuel (legal) · Andi (implementation)</p>
+    <table>
+      <thead><tr><th>Feature</th><th>Status</th><th>Priority</th><th>Ticket</th></tr></thead>
+      <tbody>
+        <tr><td>F9.1 Students never create accounts or enter personal information; results visible only to their teacher</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>new</td></tr>
+        <tr><td>F9.2 Privacy policy updated for the amended COPPA Rule and lists every processor, including the audio vendor</td><td><span class="pill broken">Broken</span> dated Feb 20, 2026; compliance date passed Apr 22</td><td><span class="pri must">Must</span></td><td>FR-21 partial</td></tr>
+        <tr><td>F9.3 support@, privacy@, hello@, schools@ answered by a named person within one business day</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>new</td></tr>
+        <tr><td>F9.4 No tracking beyond PostHog, as promised</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>new</td></tr>
+        <tr><td>F9.5 Beta terms: short note that this is a beta, what we collect, how to report a bad jam</td><td><span class="pill notbuilt">Not built</span></td><td><span class="pri must">Must</span></td><td>new</td></tr>
+        <tr><td>F9.6 District privacy pack, FERPA posture, SDPC, NY 2-d, Common Sense review</td><td><span class="pill notbuilt">Not built</span></td><td>2.0</td><td>FR-21</td></tr>
+      </tbody>
+    </table>
+
+    <h3 id="e10">E10. Engineering readiness</h3>
+    <p class="kicker">Owner: Andi · Manuel (billing, infra, access) · Chris (Base tooling)</p>
+    <table>
+      <thead><tr><th>Feature</th><th>Status</th><th>Priority</th><th>Ticket</th></tr></thead>
+      <tbody>
+        <tr><td>F10.1 GitHub Actions billing or spending limit raised so required checks run</td><td><span class="pill broken">Broken</span> all three checks fail before tests start</td><td><span class="pri must">Must</span> week 1, Manuel</td><td>new</td></tr>
+        <tr><td>F10.2 PR #2 merged through the protected path; PR #1 closed as superseded</td><td><span class="pill fixready">Fix ready</span></td><td><span class="pri must">Must</span> week 1</td><td>BUG-7, 14, 15, 16</td></tr>
+        <tr><td>F10.3 Base token-lint hook portable; colon-named beatmap renamed</td><td><span class="pill broken">Broken</span></td><td><span class="pri must">Must</span> week 1</td><td>new, Chris</td></tr>
+        <tr><td>F10.4 Staging seeded: one published jam, team accounts, verification email</td><td><span class="pill broken">Broken</span></td><td><span class="pri must">Must</span> week 1</td><td>FR-3 plus new</td></tr>
+        <tr><td>F10.5 Deploy path documented: Railway, env vars, who deploys, staging vs production, rollback tried once</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>new</td></tr>
+        <tr><td>F10.6 One QA hired and onboarded by Nov 13; owns Ready for QA</td><td><span class="pill notbuilt">Not built</span></td><td><span class="pri must">Must</span></td><td>new, Manuel</td></tr>
+        <tr><td>F10.7 PostHog events for the six measures, on staging and production</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>new</td></tr>
+        <tr><td>F10.8 Daily async update in #jamwise-engineering (did, doing, blocked); Asana moved by the engineer</td><td><span class="pill exists">Agreed</span> in the sync</td><td><span class="pri must">Must</span></td><td>working agreement</td></tr>
+        <tr><td>F10.9 Jaypal has Asana access</td><td><span class="pill broken">Broken</span> asked in the sync</td><td><span class="pri must">Must</span> this week</td><td>Rikuo</td></tr>
+      </tbody>
+    </table>
+    <div class="story"><b>US10.1</b> As an engineer, I want three green checks on a PR, so that a verified fix reaches staging the same day.<div class="ac">Done when: PR #2 merges with no bypass; the next fix merges within a day of review.</div></div>
+  </section>
+
+  <section id="r1-plan">
+    <h2>7. Release 1.0: the seven-week plan</h2>
+    <p>Dates are Pacific. Each week has an exit test. Miss the exit two weeks running and the PO re-scopes in public, in the weekly.</p>
+    <table>
+      <thead><tr><th>Week</th><th>Dates</th><th>Goal</th><th>Work</th><th>Exit test</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Oct 27 to 31</td><td>Unblock</td><td>Actions billing (Manuel). Staging creds (Manuel). PR #2 merged. Base hook and beatmap (Chris, Andi). FR-3: one jam published to staging once D12 is answered. QA job posted. Jaypal on Asana. Nedi delivers games-by-age proposal. Decisions D1 to D15 closed or deadlined.</td><td>Any team member signs in to staging, opens a jam, launches Melody Map.</td></tr>
+        <tr><td>2</td><td>Nov 2 to 6</td><td>Games batch 1, auth</td><td>BUG-6 Lyric Lockdown. BUG-12 Quiz Show. BUG-4 lifecycle with recording. Verification email fix. Join-by-code verified or built. PostHog events spec. Audio vendor and generation path confirmed end to end on staging.</td><td>Five target games playable on staging by QA. A teacher account created self-serve. <b>Go / no-go on the Dec 14 date.</b></td></tr>
+        <tr><td>3</td><td>Nov 9 to 13</td><td>Make a jam</td><td>F3.1 generation UI. FR-8 custom jams in Library. F3.3 review step. F3.5 quota. F3.9 cost logging. Assignments and results verified. QA onboarded.</td><td>Paste a lesson, get a jam, review it, assign it, a student plays Lyric Lockdown on it, result shows.</td></tr>
+        <tr><td>4</td><td>Nov 16 to 20</td><td>Loop end to end</td><td>Class creation, grade band filter in launcher, whole-class mode (Should), vocab list (Should), captions (Should). Streak Sprint if time. Site copy drafted for BUG-9, 17, 22.</td><td>QA runs the full loop on staging from a fresh account with a test class, recorded.</td></tr>
+        <tr><td>5</td><td>Nov 23 to 27 (Thanksgiving)</td><td>Truth and trust</td><td>Site fixes live. Privacy policy update. Beta terms. Contact addresses tested. Showcase video cutoff Fri Nov 27 (in if lip-sync passes QA, else 2.0).</td><td>Every public claim checked against staging. Half-capacity week; nothing new starts.</td></tr>
+        <tr><td>6</td><td>Nov 30 to Dec 4</td><td>Freeze</td><td><b>Feature freeze Fri Dec 4.</b> Bug fix only. Games that miss the bar come out of the launcher. Production deploy rehearsal and rollback test.</td><td>Zero Blocker or High on shipped games. Production matches staging.</td></tr>
+        <tr><td>7</td><td>Dec 7 to 11</td><td>Gate</td><td>One outside teacher runs the loop on production unaided, recorded. Invite emails drafted. Gate review Fri Dec 11 with Manuel.</td><td>All gates in section 8 green. Manuel signs.</td></tr>
+        <tr><td>Launch</td><td>Mon Dec 14</td><td>Invites</td><td>First batch: the teachers who asked for seats, small enough to talk to each one. Daily triage. Weekly check-in with every teacher.</td><td>Measures reviewed Jan 9 after a real school week.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="r1-gates">
+    <h2>8. Release 1.0 launch gates</h2>
+    <ol>
+      <li>Every Must in E1 to E10 is Exists, verified on staging and production by QA or the PO, not the engineer who built it.</li>
+      <li>Zero open Blocker or High bugs on shipped games. At least five games ship, at least two audio-mechanic.</li>
+      <li>Custom generation: reviewed-before-playable enforced; quota enforced; cost logged; vendor and licensing position written down.</li>
+      <li>Site matches production on game count, jam count, tier contents, price, CTAs. Testimonials and statistics gone.</li>
+      <li>Privacy policy current; beta terms live; every contact address answered in a test.</li>
+      <li>One teacher outside the team completes the loop on production unaided, recorded.</li>
+      <li>Rollback tried once on staging. Deploy path documented.</li>
+      <li>Manuel has signed D1, D2, D4, D5, D6, D7, D10, D11, D12.</li>
+    </ol>
+  </section>
+
+  <section id="r1-risks">
+    <h2>9. Release 1.0 risks</h2>
+    <table>
+      <thead><tr><th>Risk</th><th>Likelihood</th><th>What we do</th><th>Owner</th></tr></thead>
+      <tbody>
+        <tr><td>Week 1 unblocks slip (billing, creds, Base tooling). Everything behind them slips a week.</td><td>High. These have been open for three weeks.</td><td>Manuel owns three of the four. Deadline Fri Oct 31. If open on Nov 6, the PO calls Jan 5 and tells the team.</td><td>Manuel, Rikuo</td></tr>
+        <tr><td>Audio vendor terms do not allow under-13 listeners or classroom use.</td><td>Medium. Suno's published terms bar under-13 users; vendor for the existing pipeline is unnamed.</td><td>D12 answered in writing in week 1. If the answer is "no clear position," custom generation becomes 1.1 and 1.0 ships library only. Decided by Nov 6.</td><td>Manuel</td></tr>
+        <tr><td>Custom generation produces wrong or unsafe lyrics in front of a class.</td><td>Medium</td><td>F3.3 review step is a hard gate; F3.6 safety filter; report path in the player.</td><td>Andi</td></tr>
+        <tr><td>Games miss the bar on Dec 4.</td><td>Medium</td><td>Ship fewer; the site says the real number. Never ship a broken game to make ten.</td><td>Nedi</td></tr>
+        <tr><td>Capacity: Andi split with Sketchie; Nedi part-time.</td><td>High</td><td>Scope is already cut to the loop. Real hours from each engineer in week 1; the plan is re-cut to those hours, not to hopes.</td><td>Rikuo</td></tr>
+        <tr><td>December invites land the week before break; no real usage until January.</td><td>Certain</td><td>Plan for it (section 5). Invites and onboarding in December; measures in January.</td><td>Rikuo</td></tr>
+        <tr><td>No QA until mid-November; engineers verify their own work.</td><td>Medium</td><td>Post the role this week. Until then the PO is QA and says so.</td><td>Manuel, Rikuo</td></tr>
+        <tr><td>Library count on production is far below 250.</td><td>Unknown</td><td>Count it in week 1. Publish the real number. Generation covers gaps.</td><td>Manuel</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <hr class="divider">
+
+  <section id="r2">
+    <h2>10. Release 2.0 in one page</h2>
+    <p class="big">The release a school buys. Flocabulary's whole lesson sequence, better video, games by age with live play on students' own devices, a price, a school plan, and the paperwork a district asks for before it signs.</p>
+    <ol>
+      <li><b>The full sequence.</b> Video, vocab cards, vocab games, Break the Beat, Read and Respond, exit quiz, Verse Lab, discuss mode. Every step Flocabulary sells, plus the audio mechanic they cannot.</li>
+      <li><b>Video at scale.</b> Jaypal's pipeline renders the library and every reviewed custom jam, by video type and age group, with QA per stage.</li>
+      <li><b>Games by age, live.</b> Nedi's full set: singing and tapping modes for K-2, boards and sprints for 3-5, join-code live multiplayer with leaderboard for 6-8. Teacher-authored question sets. Ten or more games, all at the bar.</li>
+      <li><b>Money.</b> Credit-based Premium, Stripe, annual plan. School plan with admin dashboard, seats, teacher roster, usage. A published starting price for schools.</li>
+      <li><b>Trust.</b> District privacy pack, FERPA posture, SDPC agreement, accessibility statement, captions on everything, keyboard and screen-reader play.</li>
+      <li><b>Plumbing teachers expect.</b> Google Classroom, then Clever and ClassLink with the school plan. Public library preview for the signed-out visitor.</li>
+      <li><b>Parents.</b> Family accounts, child profiles, playlists. Last, because the school motion pays for it.</li>
+    </ol>
+    <p>Target: set after two weeks of real beta usage (week of Jan 12). Working assumption is March 2027. Entry criteria in section 12.</p>
+  </section>
+
+  <section id="r2-epics">
+    <h2>11. Release 2.0: epics and features</h2>
+    <p class="kicker">Feature level with the stories that define each epic. Detailed stories get written when the epic enters Planning, with beta data in hand.</p>
+
+    <h3>E11. Games by age and live play</h3>
+    <p class="kicker">Owner: Nedi. Depends on Nedi's games-by-age proposal (due week 1 of 1.0).</p>
+    <ul>
+      <li>F11.1 Ten or more games, each tagged to grade bands, each at the bar. Beat Builder fixed or replaced. Crossword Craze and Lyric Scramble built or cut.</li>
+      <li>F11.2 K-2 modes that work on a shared screen with no reading: sing-along scoring, tap-the-beat, picture matching.</li>
+      <li>F11.3 Live mode (Grades 6-8, Kahoot-shaped so no teacher has to learn it): teacher starts a session, students join by code on their own devices, synchronous questions, speed bonus, leaderboard on the projector, results to the teacher instantly.</li>
+      <li>F11.4 Teacher-authored question sets: ten questions on any jam, run in live mode or assigned. Nedi's estimate: about a week after live mode exists.</li>
+      <li>F11.5 Student-side streaks and badges per class, no cross-class social features (privacy policy).</li>
+      <li>F11.6 Keyboard and screen-reader play; non-audio path for Lyric Lockdown and Rhythm Recall (FR-20).</li>
+    </ul>
+    <div class="story"><b>US11.1</b> As a Grade 7 teacher, I want my class to play on their phones with a leaderboard on the board, so that the room competes the way it already does on Kahoot.<div class="ac">Done when: 30 students join by code in under a minute; the leaderboard updates within a second; the teacher has per-student results at the end with no grading.</div></div>
+    <div class="story"><b>US11.2</b> As a kindergarten teacher, I want a game my class can play from the carpet with no devices, so that the youngest rooms get the same energy.<div class="ac">Done when: at least two K-2 modes run fully on the shared screen with teacher-controlled input.</div></div>
+
+    <h3>E12. Video at scale</h3>
+    <p class="kicker">Owner: Jaypal · Manuel for cost and vendor decisions</p>
+    <ul>
+      <li>F12.1 Pipeline stages productised: transcript, story, shots, characters, keyframes, image-to-motion, lip-sync, cut, with automated QA per stage and a human review before publish.</li>
+      <li>F12.2 Four video types selectable per jam: concept, journey, process, personalised hero. Age groups 3-6 and 7-12 (and 13-14 for Grade 8).</li>
+      <li>F12.3 Every library jam re-rendered; every reviewed custom jam gets a video within a bounded time, with the audio-only version playable immediately.</li>
+      <li>F12.4 Cost per video logged; a per-jam cost ceiling; batch rendering off-peak.</li>
+      <li>F12.5 Character and style consistency across a subject so the library looks like one product, not 250 commissions.</li>
+      <li>F12.6 Rights position for generated visuals documented per vendor.</li>
+    </ul>
+    <div class="story"><b>US12.1</b> As a teacher, I want the custom jam I made yesterday to have a video today, so that it looks like the rest of the library on the projector.<div class="ac">Done when: reviewed custom jam to published video within the bounded time, with a notification; audio-only never blocked while waiting.</div></div>
+
+    <h3>E13. The full lesson sequence</h3>
+    <p class="kicker">Owner: Andi (surface) · Manuel (content generation) · Rikuo (pedagogy)</p>
+    <ul>
+      <li>F13.1 Vocab cards: term, definition, part of speech, example sentence from the lyrics, image from the video, synonyms. Assignable.</li>
+      <li>F13.2 Break the Beat: timestamped multiple-choice on the jam with lyric-line evidence; one open-ended prompt for Grade 3+.</li>
+      <li>F13.3 Read and Respond: a short reading passage generated with each jam, reviewed with it, with detail, inference and main-idea questions.</li>
+      <li>F13.4 Exit quiz: plain ten-question auto-graded quiz for teachers who want the quiet version.</li>
+      <li>F13.5 Verse Lab: students write a verse to the jam's beat using its vocabulary; rhyme suggestions; teacher sees it first; same safety gate as custom jams; never public.</li>
+      <li>F13.6 Discuss mode in projector mode: pause points with a question on screen.</li>
+      <li>F13.7 Differentiation: assign any step to a group, not just the class.</li>
+    </ul>
+    <div class="story"><b>US13.1</b> As a teacher who left Flocabulary, I want every step I used to run to exist here, so that switching costs me nothing.<div class="ac">Done when: each row of section 4 is Exists and a former Flocabulary teacher in the beta confirms the sequence covers their routine.</div></div>
+
+    <h3>E14. Plans, credits and billing</h3>
+    <p class="kicker">Owner: Manuel · Rikuo for pricing. Depends on F3.9 cost data from 1.0.</p>
+    <ul>
+      <li>F14.1 Free tier defined from beta data: library access, N generations a month, which games. The number comes from measured cost, not from the site's current copy.</li>
+      <li>F14.2 Premium as credits: a monthly price buys credits; generation, video render and live sessions have published credit costs. Annual plan.</li>
+      <li>F14.3 Stripe checkout, invoices, cancel any time, 14-day trial decided then, not promised now.</li>
+      <li>F14.4 Published starting price for a school plan, near Gimkit group and Kahoot EDU anchors (competitive analysis priority 7).</li>
+      <li>F14.5 Price test: a lower annual Premium against the $59.88 anchor several competitors use.</li>
+    </ul>
+
+    <h3>E15. School plan</h3>
+    <p class="kicker">Owner: Andi · Manuel. The tier Manuel's partners sell.</p>
+    <ul>
+      <li>F15.1 School account with seats; head teacher or admin invites teachers; teachers keep their own classes.</li>
+      <li>F15.2 Admin dashboard: active teachers, jams played, games run, results coverage by grade, generations used.</li>
+      <li>F15.3 Centralised billing, purchase order path, one invoice.</li>
+      <li>F15.4 Rostering: Google Classroom first; Clever and ClassLink with the school plan.</li>
+      <li>F15.5 Usage and outcomes export, de-identified by default (FR-23).</li>
+      <li>F15.6 Pilot support: two or three partner schools on a usage-and-outcomes pilot designed to meet ESSA Tier III (competitive analysis priority 7).</li>
+    </ul>
+    <div class="story"><b>US15.1</b> As a head teacher, I want to buy once and roll it out to my teachers, so that I am not asking each of them to expense $7.99.<div class="ac">Done when: one purchase, N seats, teachers invited by email, admin sees who is using it.</div></div>
+
+    <h3>E16. Trust and compliance kit</h3>
+    <p class="kicker">Owner: Manuel. Gate on district outreach, not on 2.0 shipping.</p>
+    <ul>
+      <li>F16.1 Written information security program and data retention policy (FR-21).</li>
+      <li>F16.2 SDPC National Data Privacy Agreement ready to sign; NY Ed Law 2-d supplement; California SOPIPA and Illinois SOPPA statements.</li>
+      <li>F16.3 FERPA posture written and published.</li>
+      <li>F16.4 Common Sense privacy evaluation requested.</li>
+      <li>F16.5 Accessibility: captions on every jam (FR-18), WCAG 2.1 AA statement, VPAT. ADA Title II deadline for large districts is April 2027.</li>
+      <li>F16.6 Evidence language: an ESSA Tier IV logic model and a planned study; no "improves learning" claims, only recall and retrieval (competitive analysis priority 4).</li>
+    </ul>
+
+    <h3>E17. Parents and families</h3>
+    <p class="kicker">Owner: Andi · Decider: Manuel. Last in 2.0.</p>
+    <ul>
+      <li>F17.1 Family account; child profiles by grade; no child accounts.</li>
+      <li>F17.2 Playlists by grade and subject; progress per child.</li>
+      <li>F17.3 Home link: a teacher can share a jam to parents by link, read-only, no login.</li>
+      <li>F17.4 Offline downloads and native apps stay out until demand shows.</li>
+    </ul>
+
+    <h3>E18. Growth surfaces</h3>
+    <p class="kicker">Owner: GTM lead when hired · Rikuo until then</p>
+    <ul>
+      <li>F18.1 Public library preview for signed-out visitors (FR-19).</li>
+      <li>F18.2 "Song to teach [topic]" pages, one per concept, each with a real jam, as the search funnel.</li>
+      <li>F18.3 Free sample songs on YouTube Shorts and TikTok; Clever Library listing; song-plus-worksheet bundles on Teachers Pay Teachers (competitive analysis priority 5).</li>
+      <li>F18.4 Shared leads with Sketchy's school outreach.</li>
+    </ul>
+  </section>
+
+  <section id="r2-order">
+    <h2>12. Release 2.0: ordering and entry criteria</h2>
+    <p>2.0 does not start as a block. Epics enter Planning in this order, each with its own entry criterion. The order is the PO's proposal; beta data can reorder it.</p>
+    <table>
+      <thead><tr><th>Order</th><th>Epic</th><th>Enters Planning when</th><th>Why this position</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>E11 Games by age and live play</td><td>Nedi's proposal accepted and 1.0 games stable for two weeks</td><td>It is the differentiator and the thing beta teachers will ask for first. Live mode is what makes 6-8 rooms adopt.</td></tr>
+        <tr><td>2</td><td>E12 Video at scale</td><td>Lip-sync passes QA on the showcase set; cost per video known</td><td>Manuel's "better videos" is the visible beat against Flocabulary, and it sells in a demo.</td></tr>
+        <tr><td>3</td><td>E14 Plans and billing</td><td>Four weeks of F3.9 cost data and week-2 return measured</td><td>Price from arithmetic. Cannot be earlier.</td></tr>
+        <tr><td>4</td><td>E15 School plan</td><td>Manuel has a partner with a named school ready to pilot</td><td>Build it for a real buyer, not a hypothetical one.</td></tr>
+        <tr><td>5</td><td>E13 Full lesson sequence</td><td>E11 shipped</td><td>Parity work; valuable, but no beta teacher chose JamWise for Read and Respond.</td></tr>
+        <tr><td>6</td><td>E16 Trust and compliance kit</td><td>In parallel from day one, owned by Manuel; gates district outreach, not the release</td><td>Paper, not code. Can run alongside everything.</td></tr>
+        <tr><td>7</td><td>E18 Growth surfaces</td><td>Site truth shipped and a GTM lead or owner named</td><td>Distribution is the biggest risk; starts as soon as there is someone to own it.</td></tr>
+        <tr><td>8</td><td>E17 Parents</td><td>School plan shipped</td><td>Consumer funnel after the school motion pays for it.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <hr class="divider">
+
+  <section id="measures">
+    <h2>13. Measures</h2>
+    <p>Instrumented in 1.0, reviewed from the first real school week (Jan 9). Targets set after two weeks of data, not before.</p>
+    <table>
+      <thead><tr><th>Measure</th><th>Definition</th><th>Why</th></tr></thead>
+      <tbody>
+        <tr><td>Time to first jam</td><td>Invite accepted to first projector play</td><td>Onboarding friction</td></tr>
+        <tr><td>Activation</td><td>Teacher plays a jam in first session</td><td>Find and play work unaided</td></tr>
+        <tr><td>Game launch</td><td>A game run with at least one student result</td><td>The differentiator is reachable</td></tr>
+        <tr><td>Generation use</td><td>Teachers who make a custom jam; share reviewed; share played in a game</td><td>Whether generation is core in practice, and the quota is right</td></tr>
+        <tr><td>Week-2 return</td><td>Teacher returns in the second school week</td><td>Habit, the only thing the free tier is for</td></tr>
+        <tr><td>Game completion</td><td>Rounds reaching a results screen</td><td>Quality bar, measured</td></tr>
+        <tr><td>Content reports</td><td>Bad-jam reports per 100 plays</td><td>The accuracy objection, quantified</td></tr>
+        <tr><td>Cost per teacher-week</td><td>Vendor spend divided by active teachers</td><td>2.0 pricing input</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="decisions">
+    <h2>14. Decisions</h2>
+    <p>Manuel's to make. Recommendations are the PO's and labelled as such. Deadline for the 1.0 set: <b>Friday, October 31</b>. Past the deadline, the recommendation stands and the PO says so in the weekly.</p>
+    <table>
+      <thead><tr><th>#</th><th>Decision</th><th>Recommendation (Rikuo)</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>D1</td><td>Launch shape</td><td>Closed beta; first batch is the teachers who asked for seats</td><td>Open</td></tr>
+        <tr><td>D2</td><td>Which games ship in 1.0; fate of Crossword Craze and Lyric Scramble</td><td>Five that pass the bar; Crossword and Scramble cut unless Nedi wants them in 2.0</td><td>Open</td></tr>
+        <tr><td>D3</td><td>Game count on the site</td><td>The real shipped number</td><td>Open</td></tr>
+        <tr><td>D4</td><td>Custom generation in 1.0</td><td>Yes, audio and lyrics only, with review gate and quota. Reverses draft 0.1.</td><td>Open; PO assumes yes</td></tr>
+        <tr><td>D5</td><td>Free tier in beta</td><td>Full library, all shipped games, 3 generations a month; the real free tier is designed in 2.0 from cost data</td><td>Open</td></tr>
+        <tr><td>D6</td><td>Billing in 1.0</td><td>None</td><td>Open</td></tr>
+        <tr><td>D7</td><td>Parents in 1.0</td><td>No; "coming later" on the site</td><td>Open</td></tr>
+        <tr><td>D8</td><td>Google Classroom</td><td>2.0, first integration</td><td>Open</td></tr>
+        <tr><td>D9</td><td>Remix styles / style switching</td><td>Not in 1.0; 2.0 only if the audio pipeline makes it cheap</td><td>Open</td></tr>
+        <tr><td>D10</td><td>Testimonials and statistics</td><td>Remove; collect real ones from the beta with consent</td><td>Open</td></tr>
+        <tr><td>D11</td><td>Library count claim</td><td>Publish the counted number</td><td>Open; count needed</td></tr>
+        <tr><td>D12</td><td>Audio vendor and rights position (library and generation; under-13 listeners; classroom use)</td><td>Need the fact in writing. Gates FR-3, E2, E3.</td><td>Open, most urgent</td></tr>
+        <tr><td>D13</td><td>Actions billing limit; PR #2 authorisation; CI owner</td><td>Manuel raises the limit this week; Andi owns CI; merge PR #2</td><td>Open; cause now known</td></tr>
+        <tr><td>D14</td><td>Staging access</td><td>Downshift accounts now</td><td>Manuel committed in the sync; not yet delivered</td></tr>
+        <tr><td>D15</td><td>Roles for Abdullah and Mahir; QA hire</td><td>Ask; post the QA role this week</td><td>Open</td></tr>
+        <tr><td>D16</td><td>Pricing model for 2.0: subscription vs credits</td><td>Credits, decided in 2.0 from F3.9 data</td><td>Open, not urgent</td></tr>
+        <tr><td>D17</td><td>Grade range: stay K-8 or extend upward per Nedi</td><td>K-8 in 1.0 and 2.0; revisit with demand</td><td>Open, not urgent</td></tr>
+        <tr><td>D18</td><td>Who leads JamWise engineering: Jaypal or Andi</td><td>Manuel said Jaypal picks in one to two weeks; the PO needs the answer by Nov 6 to plan weeks 3 to 7</td><td>Open</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="team">
+    <h2>15. Team and working agreement</h2>
+    <table>
+      <thead><tr><th>Person</th><th>Role</th><th>Owns</th></tr></thead>
+      <tbody>
+        <tr><td>Manuel Zamora</td><td>Founder. Decisions, infra and billing, content and legal, school partners</td><td>Section 14; E2 content; E3 vendor; E9; E16; D12 and D13 this week</td></tr>
+        <tr><td>Rikuo Koizumi</td><td>Product Owner. Backlog, acceptance, this document, site copy, QA until QA is hired</td><td>Ready column, weekly, E8 copy, launch gates, measures</td></tr>
+        <tr><td>Andi Maulana</td><td>Engineer, backend and platform. Joined July; also finishing Sketchie</td><td>E1, E4, E6, E7, E10; FR-8; landing path for game fixes</td></tr>
+        <tr><td>Nedi Rangelov</td><td>Games lead. 15+ years, mostly games; shared across projects; Bulgaria (GMT+2)</td><td>E5 bar and order; E11; games-by-age proposal</td></tr>
+        <tr><td>Jaypal Gohil</td><td>Video pipeline (Jamify and JamWise); may lead JamWise engineering; Philippines</td><td>E2 showcase set; E12; D18</td></tr>
+        <tr><td>Chris</td><td>Head of engineering, Downshift</td><td>Base tooling (F10.3)</td></tr>
+        <tr><td>QA (to hire)</td><td>One QA by Nov 13</td><td>Ready for QA column; gate 1 and 2 verification</td></tr>
+        <tr><td>Abdullah Tahir, Mahir Galoriya</td><td>On the board; roles to confirm</td><td>D15</td></tr>
+      </tbody>
+    </table>
+    <h4>Working agreement (agreed in the Oct 21 sync unless marked proposed)</h4>
+    <ul>
+      <li>Work moves Planning to Ready only when the PO moves it. Engineers do not pull from Planning. Ready is never empty while a Must is open.</li>
+      <li>Engineers move their own tickets: In Progress when started, Ready for QA when done with evidence attached. The board paints the story.</li>
+      <li>Daily async update in #jamwise-engineering: did, doing, blocked, with Manuel and the PO copied on blockers.</li>
+      <li>Weekly sync on Manuel's five-phase standard, deck-driven, cameras on, everyone intros and updates.</li>
+      <li>Decisions are asked with a deadline; silence past it means the recommendation stands (proposed; not objected to in the sync).</li>
+      <li>Co-founder mindset: see something wrong, fix it or say it. Flag early. Nobody assumes someone else noticed.</li>
+      <li>Nobody bypasses CI or branch protection. If CI is the blocker, CI is the ticket.</li>
+      <li>Artifacts live in a private GitHub repo the PO maintains; the Asana board is the single status surface.</li>
+    </ul>
+  </section>
+
+  <section id="out">
+    <h2>16. Not in 1.0 or 2.0</h2>
+    <ul>
+      <li>Native mobile apps and offline downloads (site promises them; "later" until demand shows).</li>
+      <li>Grades 9-12 and higher ed (D17).</li>
+      <li>Marketplace or sharing of custom jams between teachers; public user-generated content of any kind.</li>
+      <li>Jam.dev SDK metadata (FR-2, parked).</li>
+      <li>Translated captions and non-English jams.</li>
+      <li>SOC 2.</li>
+    </ul>
+  </section>
+
+  <section id="links">
+    <h2>17. Sources and links</h2>
+    <ul>
+      <li>Competitive analysis (Oct 10): <a href="https://rikuokoizumi-downshift.github.io/downshift/jamwise.competitive-analysis.html">jamwise.competitive-analysis.html</a></li>
+      <li>Landing page draft: <a href="https://scaleforgesolutions.github.io/downshift-scaleforge/jamwise.index.html">jamwise.index.html</a></li>
+      <li>Flocabulary lesson sequence: <a href="https://blog.flocabulary.com/lesson-sequence/">blog.flocabulary.com/lesson-sequence</a> (flocabulary.com/how-it-works is script-rendered and unreadable to a crawler)</li>
+      <li>Asana board: <a href="https://app.asana.com/1/1206769047111602/project/1216675920421700/board/1216675920421727">JamWise</a> · Staging: <a href="https://staging-raven-q2sq.jamwise.app/">staging-raven-q2sq.jamwise.app</a> · Public site: <a href="https://jamwise.com/">jamwise.com</a></li>
+      <li>Oct 21 team sync and Nedi 1:1 recordings (Fathom). JamWise master file (Jul 24) and Oct 21 recrawl notes.</li>
+    </ul>
+  </section>
+
+  <section id="log">
+    <h2>18. Change log</h2>
+    <table>
+      <thead><tr><th>Date</th><th>Version</th><th>Change</th></tr></thead>
+      <tbody>
+        <tr><td>2026-10-21</td><td>MVP v1 draft 0.1</td><td>First draft for the first team sync. Fifteen decisions listed.</td></tr>
+        <tr><td>2026-10-27</td><td>1.0 draft</td><td>Split into Release 1.0 (December closed beta) and Release 2.0. Custom generation moved to core per the sync. Flocabulary lesson-sequence map added. Seven-week plan with exit tests, feature freeze Dec 4, invites Dec 14. CI blocker re-identified as Actions billing. Nedi's and Jaypal's directions folded in. Decisions D16 to D18 added.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  </main>
+</div>
+<footer><div class="wrap">JamWise PRD · 1.0 draft · Internal. Status as of October 27, 2026. Unverified means not yet seen running by the current team.</div></footer>
+</body>
+</html>
