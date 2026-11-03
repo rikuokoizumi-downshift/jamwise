@@ -58,8 +58,8 @@
     <h1>JamWise PRD: what ships in December, and what makes it a Flocabulary killer after that</h1>
     <p class="kicker">Two releases. <b>1.0</b> is the closed beta that has to be in teachers' hands before winter break, scoped to what two and a half engineers can finish in seven weeks. <b>2.0</b> is the release that matches Flocabulary's lesson sequence step for step and beats it on games, video and price. Nothing in 1.0 is there because it is nice; everything in 2.0 is there because a teacher or a school will ask for it.</p>
     <div class="meta">
-      <span><b>Version</b> 1.0 draft (supersedes MVP v1 draft 0.1)</span>
-      <span><b>Date</b> October 27, 2026</span>
+      <span><b>Version</b> 1.0 draft, revision 2 (supersedes MVP v1 draft 0.1)</span>
+      <span><b>Date</b> November 4, 2026</span>
       <span><b>Owner</b> Rikuo Koizumi, Product Owner</span>
       <span><b>Decider</b> Manuel Zamora</span>
       <span><b>1.0 target</b> Beta invites Monday, December 14, 2026</span>
@@ -184,24 +184,26 @@
       <li><b>Run a class.</b> Create a class, students join by code with no personal info, assign a jam and a game, see results per student.</li>
     </ol>
     <p>Plus the things that make it safe to let strangers in: a site that tells the truth, a current privacy policy, CI that merges, a seeded staging, one QA, and analytics events on the six measures.</p>
+    <div class="card flag"><b>Week 1 status, Nov 4.</b> The week 1 exit test (a team member signs in to staging, opens a jam, launches Melody Map) did not pass. Engineering work is ready and waiting: PR #2 (Melody Map, Rhythm Recall, Beat Drop), PR #4 (Base hook) and PR #5 (Lyric Lockdown) are rebased and pass locally, but the three required GitHub checks never run (F10.1). Staging accounts (F1.3), the D12 answer (F3.7) and the rights position (F2.5) are past their Oct 31 date. QA is now assigned (Mahir). Go / no-go on the Dec 14 date is Fri Nov 6. If F10.1 and F3.7 are still open then, the PO calls Jan 5 invites by Nov 9, as section 5 says. Every feature below now carries its Asana ticket ID.</div>
     <div class="card warn"><b>Capacity, honestly.</b> Seven weeks from Oct 27 to Dec 11, one of them Thanksgiving. Andi is finishing the Sketchie handoff. Nedi is shared across projects. Jaypal is on the pipeline. That is roughly one and a half engineers on the app. 1.0 is sized to that. Anything added to 1.0 after Nov 6 pushes something else out, and the PO will say which.</div>
     <div class="card bad"><b>The calendar problem.</b> Most US schools break around Dec 18 to 19. Invites on Dec 14 give teachers three or four school days with the product. Plan for it: beta invites and onboarding in December, real classroom usage and the first measures in the week of Jan 5. If week 1 unblocks slip past Nov 6, the honest date is Jan 5 invites, and the PO will call that by Nov 9, not in December.</div>
   </section>
 
   <section id="r1-epics">
     <h2>6. Release 1.0: epics, features, user stories</h2>
-    <p class="kicker">Ten epics. Owners are proposed. Ticket IDs refer to the JamWise Asana board; "new" means the PO writes it this week.</p>
+    <p class="kicker">Ten epics. Owners are proposed. Ticket IDs refer to the JamWise Asana board; every ID below is live on the board as of Nov 4.</p>
 
     <h3 id="e1">E1. Access and accounts</h3>
     <p class="kicker">Owner: Andi · Decider: Manuel</p>
     <table>
       <thead><tr><th>Feature</th><th>Status</th><th>Priority</th><th>Ticket</th></tr></thead>
       <tbody>
-        <tr><td>F1.1 Teacher sign-up with email verification (Resend)</td><td><span class="pill broken">Broken</span> accounts created unverified, no email sent on staging</td><td><span class="pri must">Must</span></td><td>new</td></tr>
-        <tr><td>F1.2 Sign-in, sign-out, password reset</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>new</td></tr>
-        <tr><td>F1.3 Team and QA accounts on staging (Downshift logins)</td><td><span class="pill broken">Broken</span> Manuel committed to credentials in the sync</td><td><span class="pri must">Must</span> week 1</td><td>new, Manuel</td></tr>
+        <tr><td>F1.1 Teacher sign-up with email verification (Resend)</td><td><span class="pill broken">Broken</span> signup reaches "Check your email" but no email arrives; handler is on main, cause needs the deployed SHA, API log and Resend event</td><td><span class="pri must">Must</span></td><td>BUG-31</td></tr>
+        <tr><td>F1.2 Sign-in, sign-out, password reset</td><td><span class="pill unverified">Unverified</span> QA path prepared; reset shares the F1.1 email path</td><td><span class="pri must">Must</span></td><td>CH-32</td></tr>
+        <tr><td>F1.3 Team and QA accounts on staging (Downshift logins)</td><td><span class="pill broken">Broken</span> not delivered; due Oct 31</td><td><span class="pri must">Must</span> week 1</td><td>BLK-25, Manuel</td></tr>
         <tr><td>F1.4 Beta invite: waitlist email gets an invite link; "Join waitlist" stops creating accounts</td><td><span class="pill broken">Broken</span></td><td><span class="pri must">Must</span></td><td>BUG-22</td></tr>
         <tr><td>F1.5 Parent accounts</td><td><span class="pill unverified">Unverified</span></td><td>2.0</td><td>D7</td></tr>
+        <tr><td>F1.6 Teacher lifecycle emails send on their schedule, not all at once</td><td><span class="pill broken">Broken</span> five onboarding emails arrived within a minute on Oct 29, including the one-week follow-up</td><td><span class="pri">Should</span> P0 if a scheduling fault</td><td>BUG-64</td></tr>
       </tbody>
     </table>
     <div class="story"><b>US1.1</b> As a teacher, I want to sign up with my school email and verify it, so that I can sign in and reach the library.<div class="ac">Done when: verification email arrives within a minute; link signs me in; unverified accounts cannot reach the library.</div></div>
@@ -213,13 +215,13 @@
       <thead><tr><th>Feature</th><th>Status</th><th>Priority</th><th>Ticket</th></tr></thead>
       <tbody>
         <tr><td>F2.1 Published jams on staging and production</td><td><span class="pill broken">Broken</span> staging has zero; production count unverified (site 250+, founder 1,000+)</td><td><span class="pri must">Must</span></td><td>FR-3 (publish CLI built, blocked on reviewed payload and rights-cleared audio)</td></tr>
-        <tr><td>F2.2 Search by topic; filter by subject, grade band, standard</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>new</td></tr>
-        <tr><td>F2.3 Standards tags on every published jam (CCSS, NGSS, C3, CASEL)</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>new</td></tr>
-        <tr><td>F2.4 Review gate: a jam is published only after lyric accuracy and age check, with reviewer recorded</td><td><span class="pill notbuilt">Not built</span> as a process</td><td><span class="pri must">Must</span></td><td>new</td></tr>
-        <tr><td>F2.5 Rights position written down for audio, vocals and visuals, per jam</td><td><span class="pill decision">Decision D12</span></td><td><span class="pri must">Must</span></td><td>new, Manuel</td></tr>
-        <tr><td>F2.6 Vocabulary list per jam (the set the games already use)</td><td><span class="pill unverified">Unverified</span> exists in data, not shown to teachers</td><td><span class="pri">Should</span></td><td>new</td></tr>
+        <tr><td>F2.2 Search by topic; filter by subject, grade band, standard</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>FR-38</td></tr>
+        <tr><td>F2.3 Standards tags on every published jam (CCSS, NGSS, C3, CASEL)</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>FR-39, Manuel</td></tr>
+        <tr><td>F2.4 Review gate: a jam is published only after lyric accuracy and age check, with reviewer recorded</td><td><span class="pill notbuilt">Not built</span> as a process</td><td><span class="pri must">Must</span></td><td>CH-40, Manuel</td></tr>
+        <tr><td>F2.5 Rights position written down for audio, vocals and visuals, per jam</td><td><span class="pill decision">Decision D12</span> past due Oct 31</td><td><span class="pri must">Must</span></td><td>CH-28, Manuel</td></tr>
+        <tr><td>F2.6 Vocabulary list per jam (the set the games already use)</td><td><span class="pill unverified">Unverified</span> exists in data, not shown to teachers</td><td><span class="pri">Should</span></td><td>FR-41</td></tr>
         <tr><td>F2.7 Real published count on the site; five subjects named consistently (Social Studies)</td><td><span class="pill broken">Broken</span></td><td><span class="pri must">Must</span></td><td>BUG-17</td></tr>
-        <tr><td>F2.8 Showcase set: 10 jams re-rendered through Jaypal's pipeline</td><td><span class="pill notbuilt">Not built</span> lip-sync open</td><td><span class="pri">Stretch</span> cutoff Nov 27</td><td>new, Jaypal</td></tr>
+        <tr><td>F2.8 Showcase set: 10 jams re-rendered through Jaypal's pipeline</td><td><span class="pill notbuilt">Not built</span> pipeline guide shared Oct 30; FairStack comparison run under way; lip-sync open</td><td><span class="pri">Stretch</span> cutoff Nov 27</td><td>FR-42, Jaypal · CH-65</td></tr>
         <tr><td>F2.9 Public library preview for signed-out visitors</td><td><span class="pill notbuilt">Not built</span></td><td>2.0</td><td>FR-19</td></tr>
       </tbody>
     </table>
@@ -233,15 +235,15 @@
     <table>
       <thead><tr><th>Feature</th><th>Status</th><th>Priority</th><th>Ticket</th></tr></thead>
       <tbody>
-        <tr><td>F3.1 Generate from a topic or pasted lesson text: lyrics plus audio, grade band and subject chosen by the teacher, genre matched to subject</td><td><span class="pill unverified">Unverified</span> "audio pipeline working" per Jaypal; vendor unnamed</td><td><span class="pri must">Must</span></td><td>new</td></tr>
+        <tr><td>F3.1 Generate from a topic or pasted lesson text: lyrics plus audio, grade band and subject chosen by the teacher, genre matched to subject</td><td><span class="pill unverified">Unverified</span> "audio pipeline working" per Jaypal; vendor unnamed</td><td><span class="pri must">Must</span></td><td>FR-43</td></tr>
         <tr><td>F3.2 Custom jam lands in the teacher's own Library, private, marked "unreviewed"</td><td><span class="pill broken">Broken</span> shows only in Dashboard</td><td><span class="pri must">Must</span></td><td>FR-8</td></tr>
         <tr><td>F3.3 Teacher review step: read lyrics, edit or regenerate, mark reviewed; games unlock only after</td><td><span class="pill notbuilt">Not built</span></td><td><span class="pri must">Must</span></td><td>FR-8</td></tr>
         <tr><td>F3.4 Every 1.0 game launches from a reviewed custom jam exactly as from a library jam</td><td><span class="pill broken">Broken</span></td><td><span class="pri must">Must</span></td><td>FR-8</td></tr>
-        <tr><td>F3.5 Quota: 3 per month per teacher, enforced server-side, visible in the UI</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>new</td></tr>
-        <tr><td>F3.6 Safety filter on input and output (no hateful, inappropriate or child-unsafe content; Terms section 6)</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>new</td></tr>
-        <tr><td>F3.7 Audio vendor named, licensing position for classroom use and under-13 listeners written down</td><td><span class="pill decision">Decision D12</span> Nedi suggested Suno; Suno's terms bar under-13 users and have no education plan</td><td><span class="pri must">Must</span></td><td>new, Manuel</td></tr>
-        <tr><td>F3.8 Generation time shown and bounded (target under 3 minutes; the site says "minutes")</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri">Should</span></td><td>new</td></tr>
-        <tr><td>F3.9 Cost per generation measured and logged</td><td><span class="pill notbuilt">Not built</span></td><td><span class="pri must">Must</span> (pricing in 2.0 depends on it)</td><td>new</td></tr>
+        <tr><td>F3.5 Quota: 3 per month per teacher, enforced server-side, visible in the UI</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>FR-44</td></tr>
+        <tr><td>F3.6 Safety filter on input and output (no hateful, inappropriate or child-unsafe content; Terms section 6)</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>FR-45</td></tr>
+        <tr><td>F3.7 Audio vendor named, licensing position for classroom use and under-13 listeners written down</td><td><span class="pill decision">Decision D12</span> past due Oct 31. FairStack proposed as the API layer for image, video and transcription; the underlying model terms still decide under-13 and classroom use</td><td><span class="pri must">Must</span></td><td>BLK-27, Manuel</td></tr>
+        <tr><td>F3.8 Generation time shown and bounded (target under 3 minutes; the site says "minutes")</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri">Should</span></td><td>FR-46</td></tr>
+        <tr><td>F3.9 Cost per generation measured and logged</td><td><span class="pill notbuilt">Not built</span></td><td><span class="pri must">Must</span> (pricing in 2.0 depends on it)</td><td>FR-47</td></tr>
         <tr><td>F3.10 Generated video for custom jams</td><td><span class="pill notbuilt">Not built</span></td><td>2.0</td><td>E12</td></tr>
       </tbody>
     </table>
@@ -254,10 +256,10 @@
     <table>
       <thead><tr><th>Feature</th><th>Status</th><th>Priority</th><th>Ticket</th></tr></thead>
       <tbody>
-        <tr><td>F4.1 Full-screen playback with lyrics in time with audio; works for library video and custom audio-only jams</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>new</td></tr>
-        <tr><td>F4.2 Runs on Chromebook and smartboard browsers, no install</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>new</td></tr>
+        <tr><td>F4.1 Full-screen playback with lyrics in time with audio; works for library video and custom audio-only jams</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>FR-48</td></tr>
+        <tr><td>F4.2 Runs on Chromebook and smartboard browsers, no install</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>CH-49</td></tr>
         <tr><td>F4.3 Captions toggle generated from lyrics</td><td><span class="pill notbuilt">Not built</span> lyrics already timed on screen, so cheap</td><td><span class="pri">Should</span></td><td>FR-18</td></tr>
-        <tr><td>F4.4 Play again, pause, clean exit to the jam page</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>new</td></tr>
+        <tr><td>F4.4 Play again, pause, clean exit to the jam page</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>FR-50</td></tr>
       </tbody>
     </table>
     <div class="story"><b>US4.1</b> As a teacher, I want to hit play on the projector and have the room sing, so that the lesson opens with energy.<div class="ac">Done when: lyrics readable at 1280x720 from the back of a room; audio starts within 3 seconds on school Wi-Fi; tested on a Chromebook.</div></div>
@@ -268,10 +270,10 @@
     <table>
       <thead><tr><th>Game</th><th>Status</th><th>Issue</th><th>1.0</th></tr></thead>
       <tbody>
-        <tr><td>Lyric Lockdown (audio; the hero on the site)</td><td><span class="pill broken">Broken</span></td><td>BUG-6 word bank off-screen</td><td><span class="pri must">Must</span></td></tr>
-        <tr><td>Rhythm Recall (audio)</td><td><span class="pill fixready">Fix ready</span></td><td>BUG-14 in PR #2</td><td><span class="pri must">Must</span></td></tr>
+        <tr><td>Lyric Lockdown (audio; the hero on the site)</td><td><span class="pill fixready">Fix ready</span></td><td>BUG-6 fixed in PR #5, mock-audio Jam evidence; staging check pending</td><td><span class="pri must">Must</span></td></tr>
+        <tr><td>Rhythm Recall (audio)</td><td><span class="pill fixready">Fix ready</span></td><td>BUG-14 in PR #2, rebased Nov 3</td><td><span class="pri must">Must</span></td></tr>
         <tr><td>Melody Map (matching)</td><td><span class="pill fixready">Fix ready</span></td><td>BUG-7, BUG-16 in PR #2</td><td><span class="pri must">Must</span></td></tr>
-        <tr><td>Beat Drop (falling vocabulary)</td><td><span class="pill fixready">Fix ready</span></td><td>BUG-15 in PR #2</td><td><span class="pri must">Must</span></td></tr>
+        <tr><td>Beat Drop (falling vocabulary)</td><td><span class="pill fixready">Fix ready</span></td><td>BUG-15 in PR #2, rebased Nov 3</td><td><span class="pri must">Must</span></td></tr>
         <tr><td>Quiz Show (board)</td><td><span class="pill broken">Broken</span></td><td>BUG-12 ends at 15/16</td><td><span class="pri must">Must</span></td></tr>
         <tr><td>Streak Sprint (speed quiz)</td><td><span class="pill broken">Broken</span></td><td>BUG-5 crash on final question</td><td><span class="pri">Stretch</span> first fallback</td></tr>
         <tr><td>Gold Rush (chests, AI opponents)</td><td><span class="pill broken">Broken</span></td><td>BUG-10 shows the answer</td><td><span class="pri">Stretch</span></td></tr>
@@ -286,9 +288,9 @@
         <tr><td>F5.1 Fullscreen lifecycle: no chrome over a game, no stale overlay, next game gets input</td><td><span class="pill broken">Broken</span> no recording yet</td><td><span class="pri must">Must</span></td><td>BUG-4</td></tr>
         <tr><td>F5.2 One score submission per round, every game</td><td><span class="pill broken">Broken</span> in Streak Sprint</td><td><span class="pri must">Must</span></td><td>BUG-5, PR #2</td></tr>
         <tr><td>F5.3 Desktop 1440x900 and mobile web 390x844 for every shipped game</td><td><span class="pill broken">Broken</span></td><td><span class="pri must">Must</span></td><td>per game</td></tr>
-        <tr><td>F5.4 Every shipped game tagged to the grade bands it suits (K-2, 3-5, 6-8)</td><td><span class="pill notbuilt">Not built</span></td><td><span class="pri must">Must</span></td><td>new, Nedi</td></tr>
-        <tr><td>F5.5 Quality bar written and owned by Nedi; checked per game before Ready for QA</td><td><span class="pill notbuilt">Not built</span> draft below</td><td><span class="pri must">Must</span></td><td>new, Nedi</td></tr>
-        <tr><td>F5.6 Audio failure recovery (no indefinite loading) in the shared launcher</td><td><span class="pill broken">Broken</span></td><td><span class="pri must">Must</span></td><td>BUG-13 generalised</td></tr>
+        <tr><td>F5.4 Every shipped game tagged to the grade bands it suits (K-2, 3-5, 6-8)</td><td><span class="pill notbuilt">Not built</span></td><td><span class="pri must">Must</span></td><td>FR-36, Nedi</td></tr>
+        <tr><td>F5.5 Quality bar written and owned by Nedi; checked per game before Ready for QA</td><td><span class="pill notbuilt">Not built</span> draft below</td><td><span class="pri must">Must</span></td><td>SPEC-34, Nedi</td></tr>
+        <tr><td>F5.6 Audio failure recovery (no indefinite loading) in the shared launcher</td><td><span class="pill broken">Broken</span></td><td><span class="pri must">Must</span></td><td>BUG-51</td></tr>
         <tr><td>F5.7 All games free in beta; no session caps</td><td><span class="pill decision">Decision D5</span></td><td>Proposed</td><td>none</td></tr>
         <tr><td>F5.8 Keyboard and screen-reader play; non-audio path for audio games</td><td><span class="pill notbuilt">Not built</span></td><td>2.0</td><td>FR-20</td></tr>
         <tr><td>F5.9 Live multiplayer by join code with leaderboard; teacher-authored question sets</td><td><span class="pill notbuilt">Not built</span></td><td>2.0</td><td>E11</td></tr>
@@ -316,10 +318,10 @@
     <table>
       <thead><tr><th>Feature</th><th>Status</th><th>Priority</th><th>Ticket</th></tr></thead>
       <tbody>
-        <tr><td>F6.1 Create a class with a grade band; add up to 35 students by display name only</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>new</td></tr>
-        <tr><td>F6.2 Join by class code or link; student picks their name from the list; no account, no PII</td><td><span class="pill unverified">Unverified</span> how students join today is unknown</td><td><span class="pri must">Must</span></td><td>new</td></tr>
-        <tr><td>F6.3 Assign a jam plus a game to the class with a due date; students see it on join</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>new</td></tr>
-        <tr><td>F6.4 Whole-class mode: teacher runs the game on the projector and students answer on the shared screen (for K-2 rooms without devices)</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri">Should</span></td><td>new</td></tr>
+        <tr><td>F6.1 Create a class with a grade band; add up to 35 students by display name only</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>FR-52</td></tr>
+        <tr><td>F6.2 Join by class code or link; student picks their name from the list; no account, no PII</td><td><span class="pill unverified">Unverified</span> partly supported today (Andi, Oct 31); roster on a student-owned device and switching students on a shared device need a product answer</td><td><span class="pri must">Must</span></td><td>FR-53</td></tr>
+        <tr><td>F6.3 Assign a jam plus a game to the class with a due date; students see it on join</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>FR-54</td></tr>
+        <tr><td>F6.4 Whole-class mode: teacher runs the game on the projector and students answer on the shared screen (for K-2 rooms without devices)</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri">Should</span></td><td>FR-55</td></tr>
         <tr><td>F6.5 Google Classroom import, assign, grade return</td><td><span class="pill unverified">Unverified</span></td><td>2.0</td><td>D8</td></tr>
       </tbody>
     </table>
@@ -331,9 +333,9 @@
     <table>
       <thead><tr><th>Feature</th><th>Status</th><th>Priority</th><th>Ticket</th></tr></thead>
       <tbody>
-        <tr><td>F7.1 Results per student per assignment: score, completion, time</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>new</td></tr>
-        <tr><td>F7.2 Results visible only to that student's teacher</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>new</td></tr>
-        <tr><td>F7.3 Class roll-up per standard</td><td><span class="pill unverified">Unverified</span></td><td>2.0</td><td>new</td></tr>
+        <tr><td>F7.1 Results per student per assignment: score, completion, time</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>FR-56</td></tr>
+        <tr><td>F7.2 Results visible only to that student's teacher</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>FR-57</td></tr>
+        <tr><td>F7.3 Class roll-up per standard</td><td><span class="pill unverified">Unverified</span></td><td>2.0</td><td>2.0, not ticketed</td></tr>
         <tr><td>F7.4 Usage and outcomes export for pilots</td><td><span class="pill notbuilt">Not built</span></td><td>2.0</td><td>FR-23</td></tr>
       </tbody>
     </table>
@@ -347,7 +349,7 @@
         <tr><td>F8.1 Remove the six placeholder testimonials, the three uncited statistics and "Built by teachers, for teachers"</td><td><span class="pill broken">Broken</span> live</td><td><span class="pri must">Must</span></td><td>BUG-9</td></tr>
         <tr><td>F8.2 One game count, one price, one tier list, one schools@ domain, Social Studies, real jam count</td><td><span class="pill broken">Broken</span> ticket description empty</td><td><span class="pri must">Must</span></td><td>BUG-17</td></tr>
         <tr><td>F8.3 CTAs match launch status: waitlist until invited, no "Start Free"</td><td><span class="pill broken">Broken</span></td><td><span class="pri must">Must</span></td><td>BUG-22</td></tr>
-        <tr><td>F8.4 Parent and Premium pages marked "coming later"; no trial promised</td><td><span class="pill decision">Decision D6, D7</span></td><td><span class="pri must">Must</span></td><td>new</td></tr>
+        <tr><td>F8.4 Parent and Premium pages marked "coming later"; no trial promised</td><td><span class="pill decision">Decision D6, D7</span></td><td><span class="pri must">Must</span></td><td>FR-58, Rikuo</td></tr>
         <tr><td>F8.5 Game names on the site match the launcher; internal names stay internal until Manuel approves</td><td><span class="pill decision">Decision D2</span></td><td><span class="pri must">Must</span></td><td>BUG-17</td></tr>
       </tbody>
     </table>
@@ -357,11 +359,11 @@
     <table>
       <thead><tr><th>Feature</th><th>Status</th><th>Priority</th><th>Ticket</th></tr></thead>
       <tbody>
-        <tr><td>F9.1 Students never create accounts or enter personal information; results visible only to their teacher</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>new</td></tr>
-        <tr><td>F9.2 Privacy policy updated for the amended COPPA Rule and lists every processor, including the audio vendor</td><td><span class="pill broken">Broken</span> dated Feb 20, 2026; compliance date passed Apr 22</td><td><span class="pri must">Must</span></td><td>FR-21 partial</td></tr>
-        <tr><td>F9.3 support@, privacy@, hello@, schools@ answered by a named person within one business day</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>new</td></tr>
-        <tr><td>F9.4 No tracking beyond PostHog, as promised</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>new</td></tr>
-        <tr><td>F9.5 Beta terms: short note that this is a beta, what we collect, how to report a bad jam</td><td><span class="pill notbuilt">Not built</span></td><td><span class="pri must">Must</span></td><td>new</td></tr>
+        <tr><td>F9.1 Students never create accounts or enter personal information; results visible only to their teacher</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>CH-59</td></tr>
+        <tr><td>F9.2 Privacy policy updated for the amended COPPA Rule and lists every processor, including the audio vendor</td><td><span class="pill broken">Broken</span> dated Feb 20, 2026; compliance date passed Apr 22</td><td><span class="pri must">Must</span></td><td>CH-60, Manuel (split from FR-21)</td></tr>
+        <tr><td>F9.3 support@, privacy@, hello@, schools@ answered by a named person within one business day</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>CH-61, Manuel</td></tr>
+        <tr><td>F9.4 No tracking beyond PostHog, as promised</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>CH-62</td></tr>
+        <tr><td>F9.5 Beta terms: short note that this is a beta, what we collect, how to report a bad jam</td><td><span class="pill notbuilt">Not built</span></td><td><span class="pri must">Must</span></td><td>CH-63, Manuel</td></tr>
         <tr><td>F9.6 District privacy pack, FERPA posture, SDPC, NY 2-d, Common Sense review</td><td><span class="pill notbuilt">Not built</span></td><td>2.0</td><td>FR-21</td></tr>
       </tbody>
     </table>
@@ -371,15 +373,15 @@
     <table>
       <thead><tr><th>Feature</th><th>Status</th><th>Priority</th><th>Ticket</th></tr></thead>
       <tbody>
-        <tr><td>F10.1 GitHub Actions billing or spending limit raised so required checks run</td><td><span class="pill broken">Broken</span> all three checks fail before tests start</td><td><span class="pri must">Must</span> week 1, Manuel</td><td>new</td></tr>
-        <tr><td>F10.2 PR #2 merged through the protected path; PR #1 closed as superseded</td><td><span class="pill fixready">Fix ready</span></td><td><span class="pri must">Must</span> week 1</td><td>BUG-7, 14, 15, 16</td></tr>
-        <tr><td>F10.3 Base token-lint hook portable; colon-named beatmap renamed</td><td><span class="pill broken">Broken</span></td><td><span class="pri must">Must</span> week 1</td><td>new, Chris</td></tr>
-        <tr><td>F10.4 Staging seeded: one published jam, team accounts, verification email</td><td><span class="pill broken">Broken</span></td><td><span class="pri must">Must</span> week 1</td><td>FR-3 plus new</td></tr>
-        <tr><td>F10.5 Deploy path documented: Railway, env vars, who deploys, staging vs production, rollback tried once</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>new</td></tr>
-        <tr><td>F10.6 One QA hired and onboarded by Nov 13; owns Ready for QA</td><td><span class="pill notbuilt">Not built</span></td><td><span class="pri must">Must</span></td><td>new, Manuel</td></tr>
-        <tr><td>F10.7 PostHog events for the six measures, on staging and production</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>new</td></tr>
+        <tr><td>F10.1 GitHub Actions billing or spending limit raised so required checks run</td><td><span class="pill broken">Broken</span> past due Oct 31. Three required checks show "Expected" on PR #2, #4 and #5; no override for engineers</td><td><span class="pri must">Must</span> week 1, Manuel</td><td>BLK-24, Manuel</td></tr>
+        <tr><td>F10.2 PR #2 merged through the protected path; PR #1 closed as superseded</td><td><span class="pill fixready">Fix ready</span> PR #2 rebased Nov 3, conflict-free, 43 focused tests pass; waiting on F10.1. Two migration metadata files on main fail workspace lint (CH-66)</td><td><span class="pri must">Must</span> week 1</td><td>BUG-7, 14, 15, 16 · CH-66</td></tr>
+        <tr><td>F10.3 Base token-lint hook portable; colon-named beatmap renamed</td><td><span class="pill fixready">Fix ready</span> PR #4 open, five files, local checks pass; waiting on F10.1</td><td><span class="pri must">Must</span> week 1</td><td>BLK-26, Andi · Chris</td></tr>
+        <tr><td>F10.4 Staging seeded: one published jam, team accounts, verification email</td><td><span class="pill broken">Broken</span></td><td><span class="pri must">Must</span> week 1</td><td>FR-3 · CH-33</td></tr>
+        <tr><td>F10.5 Deploy path documented: Railway, env vars, who deploys, staging vs production, rollback tried once</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>CH-37</td></tr>
+        <tr><td>F10.6 One QA onboarded by Nov 13; owns Ready for QA</td><td><span class="pill exists">Assigned</span> Mahir Galoriya named JamWise QA, Nov 3; onboarding needs staging access (BLK-25)</td><td><span class="pri must">Must</span></td><td>CH-30, Rikuo</td></tr>
+        <tr><td>F10.7 PostHog events for the six measures, on staging and production</td><td><span class="pill unverified">Unverified</span></td><td><span class="pri must">Must</span></td><td>FR-35</td></tr>
         <tr><td>F10.8 Daily async update in #jamwise-engineering (did, doing, blocked); Asana moved by the engineer</td><td><span class="pill exists">Agreed</span> in the sync</td><td><span class="pri must">Must</span></td><td>working agreement</td></tr>
-        <tr><td>F10.9 Jaypal has Asana access</td><td><span class="pill broken">Broken</span> asked in the sync</td><td><span class="pri must">Must</span> this week</td><td>Rikuo</td></tr>
+        <tr><td>F10.9 Jaypal has Asana access</td><td><span class="pill exists">Exists</span> on Asana</td><td><span class="pri must">Must</span> this week</td><td>Done</td></tr>
       </tbody>
     </table>
     <div class="story"><b>US10.1</b> As an engineer, I want three green checks on a PR, so that a verified fix reaches staging the same day.<div class="ac">Done when: PR #2 merges with no bypass; the next fix merges within a day of review.</div></div>
@@ -589,21 +591,21 @@
     <table>
       <thead><tr><th>#</th><th>Decision</th><th>Recommendation (Rikuo)</th><th>Status</th></tr></thead>
       <tbody>
-        <tr><td>D1</td><td>Launch shape</td><td>Closed beta; first batch is the teachers who asked for seats</td><td>Open</td></tr>
-        <tr><td>D2</td><td>Which games ship in 1.0; fate of Crossword Craze and Lyric Scramble</td><td>Five that pass the bar; Crossword and Scramble cut unless Nedi wants them in 2.0</td><td>Open</td></tr>
-        <tr><td>D3</td><td>Game count on the site</td><td>The real shipped number</td><td>Open</td></tr>
-        <tr><td>D4</td><td>Custom generation in 1.0</td><td>Yes, audio and lyrics only, with review gate and quota. Reverses draft 0.1.</td><td>Open; PO assumes yes</td></tr>
-        <tr><td>D5</td><td>Free tier in beta</td><td>Full library, all shipped games, 3 generations a month; the real free tier is designed in 2.0 from cost data</td><td>Open</td></tr>
-        <tr><td>D6</td><td>Billing in 1.0</td><td>None</td><td>Open</td></tr>
-        <tr><td>D7</td><td>Parents in 1.0</td><td>No; "coming later" on the site</td><td>Open</td></tr>
-        <tr><td>D8</td><td>Google Classroom</td><td>2.0, first integration</td><td>Open</td></tr>
-        <tr><td>D9</td><td>Remix styles / style switching</td><td>Not in 1.0; 2.0 only if the audio pipeline makes it cheap</td><td>Open</td></tr>
-        <tr><td>D10</td><td>Testimonials and statistics</td><td>Remove; collect real ones from the beta with consent</td><td>Open</td></tr>
-        <tr><td>D11</td><td>Library count claim</td><td>Publish the counted number</td><td>Open; count needed</td></tr>
-        <tr><td>D12</td><td>Audio vendor and rights position (library and generation; under-13 listeners; classroom use)</td><td>Need the fact in writing. Gates FR-3, E2, E3.</td><td>Open, most urgent</td></tr>
-        <tr><td>D13</td><td>Actions billing limit; PR #2 authorisation; CI owner</td><td>Manuel raises the limit this week; Andi owns CI; merge PR #2</td><td>Open; cause now known</td></tr>
-        <tr><td>D14</td><td>Staging access</td><td>Downshift accounts now</td><td>Manuel committed in the sync; not yet delivered</td></tr>
-        <tr><td>D15</td><td>Roles for Abdullah and Mahir; QA hire</td><td>Ask; post the QA role this week</td><td>Open</td></tr>
+        <tr><td>D1</td><td>Launch shape</td><td>Closed beta; first batch is the teachers who asked for seats</td><td>Deadline Oct 31 passed; recommendation stands unless Manuel objects at the Nov 4 sync</td></tr>
+        <tr><td>D2</td><td>Which games ship in 1.0; fate of Crossword Craze and Lyric Scramble</td><td>Five that pass the bar; Crossword and Scramble cut unless Nedi wants them in 2.0</td><td>Open; waiting on Nedi's games-by-age proposal (SPEC-29, due Oct 31)</td></tr>
+        <tr><td>D3</td><td>Game count on the site</td><td>The real shipped number</td><td>Deadline Oct 31 passed; recommendation stands unless Manuel objects at the Nov 4 sync</td></tr>
+        <tr><td>D4</td><td>Custom generation in 1.0</td><td>Yes, audio and lyrics only, with review gate and quota. Reverses draft 0.1.</td><td>Deadline Oct 31 passed; recommendation stands unless Manuel objects at the Nov 4 sync; FR-43 to FR-47 planned on yes</td></tr>
+        <tr><td>D5</td><td>Free tier in beta</td><td>Full library, all shipped games, 3 generations a month; the real free tier is designed in 2.0 from cost data</td><td>Deadline Oct 31 passed; recommendation stands unless Manuel objects at the Nov 4 sync</td></tr>
+        <tr><td>D6</td><td>Billing in 1.0</td><td>None</td><td>Deadline Oct 31 passed; recommendation stands unless Manuel objects at the Nov 4 sync</td></tr>
+        <tr><td>D7</td><td>Parents in 1.0</td><td>No; "coming later" on the site</td><td>Deadline Oct 31 passed; recommendation stands unless Manuel objects at the Nov 4 sync</td></tr>
+        <tr><td>D8</td><td>Google Classroom</td><td>2.0, first integration</td><td>Deadline Oct 31 passed; recommendation stands unless Manuel objects at the Nov 4 sync</td></tr>
+        <tr><td>D9</td><td>Remix styles / style switching</td><td>Not in 1.0; 2.0 only if the audio pipeline makes it cheap</td><td>Deadline Oct 31 passed; recommendation stands unless Manuel objects at the Nov 4 sync</td></tr>
+        <tr><td>D10</td><td>Testimonials and statistics</td><td>Remove; collect real ones from the beta with consent</td><td>Deadline Oct 31 passed; recommendation stands unless Manuel objects at the Nov 4 sync</td></tr>
+        <tr><td>D11</td><td>Library count claim</td><td>Publish the counted number</td><td>Open; count needed (blocked on staging and production access)</td></tr>
+        <tr><td>D12</td><td>Audio vendor and rights position (library and generation; under-13 listeners; classroom use)</td><td>Need the fact in writing. Gates FR-3, E2, E3.</td><td>Open, most urgent, past due. FairStack would change the API provider, not the model terms that decide this</td></tr>
+        <tr><td>D13</td><td>Actions billing limit; PR #2 authorisation; CI owner</td><td>Manuel raises the limit this week; Andi owns CI; merge PR #2</td><td>Open, past due. Three PRs waiting (BLK-24)</td></tr>
+        <tr><td>D14</td><td>Staging access</td><td>Downshift accounts now</td><td>Not delivered, past due (BLK-25)</td></tr>
+        <tr><td>D15</td><td>Roles for Abdullah and Mahir; QA hire</td><td>Ask; post the QA role this week</td><td>Closed Nov 3: Mahir is JamWise QA; Abdullah joins for project visibility</td></tr>
         <tr><td>D16</td><td>Pricing model for 2.0: subscription vs credits</td><td>Credits, decided in 2.0 from F3.9 data</td><td>Open, not urgent</td></tr>
         <tr><td>D17</td><td>Grade range: stay K-8 or extend upward per Nedi</td><td>K-8 in 1.0 and 2.0; revisit with demand</td><td>Open, not urgent</td></tr>
         <tr><td>D18</td><td>Who leads JamWise engineering: Jaypal or Andi</td><td>Manuel said Jaypal picks in one to two weeks; the PO needs the answer by Nov 6 to plan weeks 3 to 7</td><td>Open</td></tr>
@@ -622,8 +624,8 @@
         <tr><td>Nedi Rangelov</td><td>Games lead. 15+ years, mostly games; shared across projects; Bulgaria (GMT+2)</td><td>E5 bar and order; E11; games-by-age proposal</td></tr>
         <tr><td>Jaypal Gohil</td><td>Video pipeline (Jamify and JamWise); may lead JamWise engineering; Philippines</td><td>E2 showcase set; E12; D18</td></tr>
         <tr><td>Chris</td><td>Head of engineering, Downshift</td><td>Base tooling (F10.3)</td></tr>
-        <tr><td>QA (to hire)</td><td>One QA by Nov 13</td><td>Ready for QA column; gate 1 and 2 verification</td></tr>
-        <tr><td>Abdullah Tahir, Mahir Galoriya</td><td>On the board; roles to confirm</td><td>D15</td></tr>
+        <tr><td>Mahir Galoriya</td><td>QA for JamWise from Nov 3; every Ready for QA ticket is assigned to him</td><td>Ready for QA column; gate 1 and 2 verification</td></tr>
+        <tr><td>Abdullah Tahir</td><td>Project visibility, added Nov 3</td><td>None; informed</td></tr>
       </tbody>
     </table>
     <h4>Working agreement (agreed in the Oct 21 sync unless marked proposed)</h4>
@@ -669,12 +671,13 @@
       <tbody>
         <tr><td>2026-10-21</td><td>MVP v1 draft 0.1</td><td>First draft for the first team sync. Fifteen decisions listed.</td></tr>
         <tr><td>2026-10-27</td><td>1.0 draft</td><td>Split into Release 1.0 (December closed beta) and Release 2.0. Custom generation moved to core per the sync. Flocabulary lesson-sequence map added. Seven-week plan with exit tests, feature freeze Dec 4, invites Dec 14. CI blocker re-identified as Actions billing. Nedi's and Jaypal's directions folded in. Decisions D16 to D18 added.</td></tr>
+        <tr><td>2026-11-04</td><td>1.0 draft, revision 2</td><td>Every 1.0 feature now carries its Asana ID (tickets FR-38 to CH-66). Week 1 status card added to section 5. Statuses updated from #jamwise-engineering, Oct 29 to Nov 3: PR #2, #4 and #5 ready and blocked on CI billing; BUG-6 fix ready; BUG-31 cause narrowed. New: F1.6 lifecycle emails (BUG-64), migration lint risk (CH-66), FairStack comparison for the video pipeline (CH-65). D15 closed: Mahir is QA. Decisions past the Oct 31 deadline marked as standing on the recommendation unless Manuel objects.</td></tr>
       </tbody>
     </table>
   </section>
 
   </main>
 </div>
-<footer><div class="wrap">JamWise PRD · 1.0 draft · Internal. Status as of October 27, 2026. Unverified means not yet seen running by the current team.</div></footer>
+<footer><div class="wrap">JamWise PRD · 1.0 draft, revision 2 · Internal. Status as of November 4, 2026. Unverified means not yet seen running by the current team.</div></footer>
 </body>
 </html>
